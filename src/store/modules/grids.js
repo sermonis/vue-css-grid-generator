@@ -1,5 +1,5 @@
-import Vue from 'Vue';
-import Vuex from 'Vuex';
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
@@ -8,6 +8,8 @@ const state = {
 	root: {
 		width: '820px',
 		height: '640px',
+		containerWidth: '820px',
+		containerHeight: '640px',
 		columns: 2,
 		rows: 2,
 		columnsGap: '0',
@@ -22,10 +24,10 @@ const state = {
 		templateRows: ['1fr', '1fr'],
 		selectedItem: 0,
 		items: [
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'none', alignSelf: 'none'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'none', alignSelf: 'none'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'none', alignSelf: 'none'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'none', alignSelf: 'none'}
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'stretch', alignSelf: 'stretch'},
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'stretch', alignSelf: 'stretch'},
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'stretch', alignSelf: 'stretch'},
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'stretch', alignSelf: 'stretch'}
 		]
 	},
 }
@@ -43,6 +45,12 @@ const getters = {
 			justifyItems: state[grid].justifyItems,
 			alignContent: state[grid].alignContent,
 			alignItems: state[grid].alignItems
+		}
+	},
+	containerStyles: (state, getters) => grid => {
+		return {
+			width: state[grid].containerWidth,
+			height: state[grid].containerHeight
 		}
 	},
 	cellStyles: (state, getters) => (grid) => {
@@ -68,6 +76,17 @@ const getters = {
 		});
 		return styles;
 	},
+	cellsSubGrids: (state, getters) => grid => {
+		let items = [];
+		state[grid].items.map((item) => {
+			if (item.subGrid) {
+				items.push(item.subGrid);
+			} else {
+				items.push(null);
+			}
+		})
+		return items;
+	},
 	gridCellsCount: state => (grid) => state[grid].columns * state[grid].rows,
 	fields: state => (origin, grid) => {
 		if (origin === 'columns') {
@@ -75,7 +94,7 @@ const getters = {
 		} else if (origin === 'rows') {
 			return state[grid].templateRows
 		}
-	}
+	},
 }
 const mutations = {
 	addGrid(state, value) {
@@ -86,16 +105,18 @@ const mutations = {
 		columns: 2,
 		rows: 2,
 		columnsGap: '0',
+		width: "100%",
+		height: '100%', 
 		rowsGap: '0',
 		itemsCount: 4,
 		gridAutoFlow: 'row',
 		justifyContent: 'start',
 		alignContent: 'start',
+		selectedItem: 0,
 		justifyItems: 'stretch',
 		alignItems: 'stretch',
 		templateColumns: ['1fr', '1fr'],
 		templateRows: ['1fr', '1fr'],
-		selectedItem: 0,
 		items: [
 		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'none', alignSelf: 'none'},
 		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'none', alignSelf: 'none'},
@@ -103,10 +124,9 @@ const mutations = {
 		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'none', alignSelf: 'none'}
 		]
 	});
-		Vue.set(state[value], 'width', state.selectedElement.clientWidth + 'px');
-		Vue.set(state[value], 'height', state.selectedElement.clientHeight + 'px');
+		Vue.set(state[value], 'containerWidth', state.selectedElement.clientWidth + 'px');
+		Vue.set(state[value], 'containerHeight', state.selectedElement.clientHeight + 'px');
 		state.currentGrid = value
-		console.log(state[value])
 	},
 	changeCurrentGrid(state, value) {
 		state.currentGrid = value
@@ -134,6 +154,18 @@ const mutations = {
 				while (value < state[state.currentGrid].templateRows.length) 
 					state[state.currentGrid].templateRows.pop();  
 		}
+
+		if (field === 'itemsCount') {
+			if (value > state[state.currentGrid].items.length) 
+				while (value > state[state.currentGrid].items.length) 
+					state[state.currentGrid].items.push({fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'none', alignSelf: 'none'});
+
+			if (value < state[state.currentGrid].items.length) {
+				Vue.set(state[state.currentGrid], 'selectedItem', value - 1);
+				while (value < state[state.currentGrid].items.length) 
+					state[state.currentGrid].items.pop();
+			}
+		}
 		
 	},
 	changeCellOption(state, {value, field, index}) {
@@ -147,7 +179,7 @@ const mutations = {
 		}
 	},
 	selectItem(state, {index, el}) {
-		state[state.currentGrid].selectedItem = index - 1;
+		Vue.set(state[state.currentGrid], 'selectedItem', index - 1);
 		state.selectedElement = el;
 	}
 }

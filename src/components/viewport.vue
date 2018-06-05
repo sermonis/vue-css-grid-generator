@@ -1,12 +1,12 @@
 <template>
-  <div class="viewport" :style="{gridTemplateColumns: '1fr ' + gridWidth + ' 1fr', gridTemplateRows: '1fr ' + gridHeight + ' 1fr'}">
+  <div class="viewport" :style="{gridTemplateColumns: '1fr ' + containerStyles.width + ' 1fr', gridTemplateRows: '1fr ' + containerStyles.height + ' 1fr'}">
     <div class="top-control">
       <control origin='columns'></control>
     </div>
     <div class="left-control">
       <control origin='rows'></control>
     </div>
-    <div class="grid-cell">
+    <div :style="{width: gridWidth, height: gridHeight}" class="grid-cell">
       <grid></grid>
     </div>
     <div class="right-control">
@@ -29,6 +29,9 @@ export default {
   computed: {
     currentGrid: function() {
       return this.$store.state.grids.currentGrid
+    },
+    containerStyles: function() {
+      return this.$store.getters.containerStyles(this.currentGrid);
     },
     gridHeight: function(){
       return this.$store.state.grids[this.currentGrid].height

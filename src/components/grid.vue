@@ -9,23 +9,22 @@
 			</div>
 		</div>
 		<div :style="gridStyle" class="grid overlay">
-			<div ref="item" v-for="i in itemsCount" :class="{active: i - 1 == index}" @click="selectItem(i)" :style="cellStyles[i-1]">
-				<div class="item">
-					<div>Item <b>{{i}}</b></div>
-					<span></span>
-				</div>
-			</div>
+			<item :key="i" :sub-grid="subGrids[i-1]" ref="item" v-for="i in itemsCount" :class="{active: i - 1 == index}" @click.native="selectItem(i)" :style="cellStyles[i-1]">{{ i }}</item>
 		</div>
 	</div>
 
 </template>
 
 <script>
+	import item from './item';
 	export default {
 		name: 'grid',
+		components: {
+			item
+		},
 		methods: {
 			selectItem(index) {
-				let el = this.$refs.item[index-1]
+				let el = this.$refs.item[index-1].$el;
 				this.$store.commit('selectItem', {index, el});
 			}
 		},
@@ -43,10 +42,13 @@
 				return this.$store.state.grids[this.currentGrid].itemsCount
 			},
 			index: function() {
-				return this.$store.state.grids[this.currentGrid].selectedItem
+				return this.$store.state.grids[this.currentGrid].selectedItem;
 			},
 			cellStyles: function() {
 				return this.$store.getters.cellStyles(this.currentGrid)
+			},
+			subGrids: function() {
+				return this.$store.getters.cellsSubGrids(this.currentGrid)
 			}
 		},
 		mounted(){
@@ -102,31 +104,6 @@
 	}
 	.grid > div b {
 		font-size: 16px;
-	}
-	.item {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		min-width: 30px;
-		min-height: 30px;
-	}
-	.item div {
-		position: absolute;
-		z-index: 3;
-	}
-	.grid .item span {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		min-width: 30px;
-		min-height: 30px;
-		background: #6799ad;
-		opacity: 1;
-		justify-content: center;
-		z-index: 2;
-		align-items: center;
 	}
 	.grid span {
 		opacity: .2;

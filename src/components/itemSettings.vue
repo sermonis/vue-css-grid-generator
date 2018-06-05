@@ -16,7 +16,6 @@
 				  <option value="end">Bottom</option>
 				  <option value="center">Center</option>
 				  <option value="stretch">Stretch</option>
-				  <option value="none">None</option>
 				</select>
 
 				<label for="align-self">Align Vertical:</label> <select id="align-self" v-model="alignSelf">
@@ -24,7 +23,6 @@
 				  <option value="end">Bottom</option>
 				  <option value="center">Center</option>
 				  <option value="stretch">Stretch</option>
-				  <option value="none">None</option>
 				</select>
 			</div>
 		</div>
@@ -54,16 +52,14 @@
 	export default {
 		name: 'itemSettings',
 		computed: {
-			currentGrid: function() {
-			  return this.$store.state.grids.currentGrid
-			},
 			currentGrid: { get() {return this.$store.state.grids.currentGrid},
 			  set (value) {this.changeCurrentGrid(value)}
 			},
 			index: function() {
 				return this.$store.state.grids[this.currentGrid].selectedItem
 			},
-			fromCol: { get() {return this.$store.state.grids[this.currentGrid].items[this.index].fromCol},
+			fromCol: { get() {
+				return this.$store.state.grids[this.currentGrid].items[this.index].fromCol},
 			  set (value) {this.updateCellOption(value, 'fromCol', this.index)}
 			},
 			toCol: { get() {return this.$store.state.grids[this.currentGrid].items[this.index].toCol},
