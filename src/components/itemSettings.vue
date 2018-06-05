@@ -16,7 +16,7 @@
 				  <option value="end">Right</option>
 				  <option value="center">Center</option>
 				  <option value="stretch">Stretch</option>
-					<option value="auto">Auto</option>
+					<option value="auto">auto</option>
 				</select>
 
 				<label for="align-self">Align Vertical:</label> <select id="align-self" v-model="alignSelf">
@@ -24,7 +24,7 @@
 				  <option value="end">Bottom</option>
 				  <option value="center">Center</option>
 				  <option value="stretch">Stretch</option>
-					<option value="auto">Auto</option>
+					<option value="auto">auto</option>
 				</select>
 			</div>
 		</div>

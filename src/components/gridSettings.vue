@@ -23,7 +23,7 @@
         </div>
         <div>
           <label for="rows-count">Rows:</label>
-          <input id="rows-count"v-model='rows' type="text">
+          <input id="rows-count" v-model='rows' type="text">
         </div>
       </div>
     </div>
@@ -45,7 +45,7 @@
       <div>
         <div>
           <label for="items-count">Items Count: </label>
-          <input id="items-count" v-model.number="itemsCount" type="text">
+          <input min=1 :max='this.maxCount' id="items-count" type='number' v-model.number="itemsCount">
         </div>
         <div>
           <label for="auto-flow">Auto Flow:</label>
@@ -145,6 +145,10 @@ computed: {
     set (value) {this.updateOption(value, 'rows')}
   },
 
+  maxCount: function() {
+    return this.$store.state.grids[this.currentGrid].rows * this.$store.state.grids[this.currentGrid].columns
+  },
+
   columnsGap: { get() {return this.$store.state.grids[this.currentGrid].columnsGap},
     set (value) {this.updateOption(value, 'columnsGap')}
   },
@@ -153,8 +157,16 @@ computed: {
     set (value) {this.updateOption(value, 'rowsGap')}
   },
 
-  itemsCount: { get() {return this.$store.state.grids[this.currentGrid].itemsCount},
-    set (value) {this.updateOption(value, 'itemsCount')}
+  itemsCount: { get() {
+      let value = this.$store.state.grids[this.currentGrid].itemsCount;
+      if (value > 0) return value;
+      else return 1;
+    },
+    set (value) {
+      if (value < 1) this.updateOption(1, 'itemsCount'); 
+      else if (value <= this.maxCount) this.updateOption(value, 'itemsCount')
+      else this.updateOption(this.maxCount, 'itemsCount')
+      }
   },
 
   gridAutoFlow: { get() {return this.$store.state.grids[this.currentGrid].gridAutoFlow},
