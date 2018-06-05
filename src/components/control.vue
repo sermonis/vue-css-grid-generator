@@ -18,10 +18,14 @@
 			fieldsSize: function() {
 				if (this.origin === 'columns') return {
 					gridTemplateColumns: this.$store.state.grids[this.currentGrid].templateColumns.join(' '),
-					gridColumnGap: this.$store.state.grids[this.currentGrid].columnsGap
+					gridColumnGap: this.$store.state.grids[this.currentGrid].columnsGap,
+					width: this.$store.state.grids[this.currentGrid].width,
+					justifyContent: this.$store.state.grids[this.currentGrid].justifyContent
 				}; else if (this.origin === 'rows') return {
 					gridTemplateRows: this.$store.state.grids[this.currentGrid].templateRows.join(' '),
-					gridRowGap: this.$store.state.grids[this.currentGrid].rowsGap
+					gridRowGap: this.$store.state.grids[this.currentGrid].rowsGap,
+					height: this.$store.state.grids[this.currentGrid].height,
+					alignContent: this.$store.state.grids[this.currentGrid].alignContent,
 				}
 			}
 		},

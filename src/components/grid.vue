@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<div :style="gridStyle" class="grid">
-			<div class="cell-container" v-for="i in cellsCount">
+			<div class="cell-container" v-bind:key="i" v-for="i in cellsCount">
 				<div class="cell">
 					<div>{{ i }}</div>
 					<span></span>
