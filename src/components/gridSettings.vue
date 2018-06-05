@@ -62,19 +62,19 @@
       <h2>Align Items</h2>
       <div>
         <div>
-          <label for="justify-items">Vertical:</label>
+          <label for="justify-items">Horizontal:</label>
           <select id="justify-items" v-model="justifyItems">
-            <option value="start">Start</option>
-            <option value="end">End</option>
+            <option value="start">Left</option>
+            <option value="end">Right</option>
             <option value="center">Center</option>
             <option value="stretch">Stretch</option>
           </select>
         </div>
         <div>
-          <label for="align-items">Horizontal</label>
+          <label for="align-items">Vertical:</label>
           <select id="align-items" v-model="alignItems">
-            <option value="start">Start</option>
-            <option value="end">End</option>
+            <option value="start">Top</option>
+            <option value="end">Bottom</option>
             <option value="center">Center</option>
             <option value="stretch">Stretch</option>
           </select>
@@ -85,10 +85,10 @@
       <h2>Align Table</h2>
       <div>
         <div>
-          <label for="justify-content">Vertical</label>
+          <label for="justify-content">Horizontal</label>
           <select id="justify-content" v-model="justifyContent">
-            <option value="start">Start</option>
-            <option value="end">End</option>
+            <option value="start">Left</option>
+            <option value="end">Right</option>
             <option value="center">Center</option>
             <option value="space-around">Space Around</option>
             <option value="space-between">Space Between</option>
@@ -96,10 +96,10 @@
           </select>
         </div>
         <div>
-          <label for="align-content">Horizontal:</label>
+          <label for="align-content">Vertical:</label>
           <select id="align-content" v-model="alignContent">
-            <option value="start">Start</option>
-            <option value="end">End</option>
+            <option value="start">Top</option>
+            <option value="end">Bottom</option>
             <option value="center">Center</option>
             <option value="space-around">Space Around</option>
             <option value="space-between">Space Between</option>

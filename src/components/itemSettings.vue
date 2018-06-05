@@ -12,10 +12,11 @@
 
 			<div>
 				<label for="justify-self">Align Horizontal:</label> <select id="justify-self" v-model="justifySelf">
-				  <option value="start">Top</option>
-				  <option value="end">Bottom</option>
+				  <option value="start">Left</option>
+				  <option value="end">Right</option>
 				  <option value="center">Center</option>
 				  <option value="stretch">Stretch</option>
+					<option value="auto">Auto</option>
 				</select>
 
 				<label for="align-self">Align Vertical:</label> <select id="align-self" v-model="alignSelf">
@@ -23,6 +24,7 @@
 				  <option value="end">Bottom</option>
 				  <option value="center">Center</option>
 				  <option value="stretch">Stretch</option>
+					<option value="auto">Auto</option>
 				</select>
 			</div>
 		</div>
