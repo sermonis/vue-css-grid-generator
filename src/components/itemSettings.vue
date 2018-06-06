@@ -86,7 +86,7 @@
 				this.$store.commit('grid/changeCellOption', {value, field, index})
 			},
 			addGrid(event) {
-				this.$store.commit('grid/addGrid', event.target[0].value)
+				this.$store.dispatch('grid/addGrid', event.target[0].value);
 			},
 			changeCurrentGrid(value) {
 				this.$store.commit('grid/changeCurrentGrid', value)

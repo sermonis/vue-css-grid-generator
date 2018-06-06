@@ -31,12 +31,23 @@ const mutations = {
     Vue.set(state[value], 'container', state.selectedElement);
 	},
 	changeCurrentGrid(state, value) {
-		state.currentGrid = value
-    Vue.set(state, 'container', {
-      width: state.refs[state[value].container][0].$el.clientWidth + 'px',
-      height: state.refs[state[value].container][0].$el.clientHeight + 'px'
-    })
-	},
+    state.currentGrid = value
+    if (value === 'root') Vue.set(state, 'container', {
+      width: state[value].width,
+      height: state[value].height
+    });
+    else if (state.refs[state[value].container][0]) {
+      let sizes = {
+        width: state.refs[state[value].container][0].$el.clientWidth + 'px',
+        height: state.refs[state[value].container][0].$el.clientHeight + 'px'
+      }
+      Vue.set(state, 'container', sizes);
+      Vue.set(state[value], 'cachedContainerSizes', sizes)
+    } else {
+      console.log('else')
+      Vue.set(state, 'container', state[value].cachedContainerSizes);
+    }
+  },
 	changeOption(state, {value, field}) {
 		state[state.currentGrid][field] = value;
 		if (field == 'columns' && value !== state[state.currentGrid].templateColumns.length)	{
