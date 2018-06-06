@@ -28,11 +28,14 @@ const mutations = {
 		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'}
 		]
 	});
-		Vue.set(state[value], 'container', state.selectedElement);
-		state.currentGrid = value
+    Vue.set(state[value], 'container', state.selectedElement);
 	},
 	changeCurrentGrid(state, value) {
 		state.currentGrid = value
+    Vue.set(state, 'container', {
+      width: state.refs[state[value].container][0].$el.clientWidth + 'px',
+      height: state.refs[state[value].container][0].$el.clientHeight + 'px'
+    })
 	},
 	changeOption(state, {value, field}) {
 		state[state.currentGrid][field] = value;
@@ -81,10 +84,10 @@ const mutations = {
 			Vue.set(state[state.currentGrid].templateRows, index, value)
 		}
 	},
-	selectItem(state, {index, el}) {
-		Vue.set(state[state.currentGrid], 'selectedItem', index - 1);
-		state.selectedElement = el[index-1].$el;
-		console.log(el[index-1])
+	selectItem(state, {index, el, refs}) {
+    Vue.set(state[state.currentGrid], 'selectedItem', index - 1);
+    Vue.set(state, 'refs', refs)
+		state.selectedElement = el;
 	}
 }
 

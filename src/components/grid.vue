@@ -9,7 +9,7 @@
 			</div>
 		</div>
 		<div :style="gridStyle" class="grid overlay">
-			<item :key="i" :sub-grid="subGrids[i-1]" ref="item" v-for="i in itemsCount" :class="{active: i - 1 == index}" @click.native="selectItem(i)" :style="cellStyles[i-1]">{{ i }}</item>
+			<item :key="i + currentGrid" :sub-grid="subGrids[i-1]" :ref="currentGrid + '' + i " v-for="i in itemsCount" :class="{active: i - 1 == index}" @click.native="selectItem(i)" :style="cellStyles[i-1]">{{ i }}</item>
 		</div>
 	</div>
 
@@ -24,8 +24,9 @@
 		},
 		methods: {
 			selectItem(index) {
-				let el = this.$refs.item;
-				this.$store.commit('grid/selectItem', {index, el});
+				let refs = this.$refs;
+				let el = this.currentGrid + '' + index;
+				this.$store.commit('grid/selectItem', {index, el, refs});
 
 			}
 		},

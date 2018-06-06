@@ -32,7 +32,6 @@ const state = {
 		]
 	},
 }
-console.log(mutations, getters)
 export default {
 	namespaced: true,
 	state,

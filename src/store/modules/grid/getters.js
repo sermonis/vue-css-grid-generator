@@ -15,11 +15,12 @@ const getters = {
 		}
 	},
 	containerStyles: (state, getters) => grid => {
-		if (state[grid].container)
+		if (state[grid].container) {
+		console.log(state.container);
 		return {
-			width: state[grid].container.clientWidth + 'px',
-			height: state[grid].container.clientHeight + 'px'
-		}
+			width: state.container.width,
+			height: state.container.height
+		}}
 	},
 	cellStyles: (state, getters) => (grid) => {
 		let styles = [];
