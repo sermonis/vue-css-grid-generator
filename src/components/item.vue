@@ -15,16 +15,16 @@
 		props: ['subGrid'],
 		computed: {
 			gridStyle: function() {
-				if (this.subGrid) return this.$store.getters.gridStyle(this.subGrid)
+				if (this.subGrid) return this.$store.getters['grid/gridStyle'](this.subGrid)
 			},
 			itemsCount: function() {
-				if (this.subGrid) return this.$store.state.grids[this.subGrid].itemsCount
+				if (this.subGrid) return this.$store.state.grid[this.subGrid].itemsCount
 			},
 			cellStyles: function() {
-				if (this.subGrid) return this.$store.getters.cellStyles(this.subGrid)
+				if (this.subGrid) return this.$store.getters['grid/cellStyles'](this.subGrid)
 			},
 			subGrids: function() {
-				if (this.subGrid) return this.$store.getters.cellsSubGrids(this.subGrid)
+				if (this.subGrid) return this.$store.getters['grid/cellsSubGrids'](this.subGrid)
 			}
 
 		}

@@ -24,38 +24,39 @@
 		},
 		methods: {
 			selectItem(index) {
-				let el = this.$refs.item[index-1].$el;
-				this.$store.commit('selectItem', {index, el});
+				let el = this.$refs.item;
+				this.$store.commit('grid/selectItem', {index, el});
+
 			}
 		},
 		computed: {
 			currentGrid: function() {
-				return this.$store.state.grids.currentGrid
+				return this.$store.state.grid.currentGrid
 			},
 			gridStyle: function() {
-				return this.$store.getters.gridStyle(this.currentGrid)
+				return this.$store.getters['grid/gridStyle'](this.currentGrid)
 			},
 			cellsCount: function() {
-				return	this.$store.getters.gridCellsCount(this.currentGrid)
+				return	this.$store.getters['grid/gridCellsCount'](this.currentGrid)
 			},
 			itemsCount: function() {
-				return this.$store.state.grids[this.currentGrid].itemsCount
+				return this.$store.state.grid[this.currentGrid].itemsCount
 			},
 			index: function() {
-				return this.$store.state.grids[this.currentGrid].selectedItem;
+				return this.$store.state.grid[this.currentGrid].selectedItem;
 			},
 			cellStyles: function() {
-				return this.$store.getters.cellStyles(this.currentGrid)
+				return this.$store.getters['grid/cellStyles'](this.currentGrid)
 			},
 			subGrids: function() {
-				return this.$store.getters.cellsSubGrids(this.currentGrid)
+				return this.$store.getters['grid/cellsSubGrids'](this.currentGrid)
 			}
 		},
-		mounted(){
-			let index = 1;
-			let el = this.$refs.item[index-1]
-			this.$store.commit('selectItem', {index, el});
-		},
+		// mounted(){
+		// 	let index = 1;
+		// 	let el = this.$refs.item;
+		// 	this.$store.commit('grid/selectItem', {index, el});
+		// },
 	}
 </script>
 

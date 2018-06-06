@@ -10,22 +10,22 @@
 		props: ['origin'],
 		computed: {
 			currentGrid: function() {
-				return this.$store.state.grids.currentGrid
+				return this.$store.state.grid.currentGrid
 			},
 			fields: function() {
-				return this.$store.getters.fields(this.origin, this.currentGrid);
+				return this.$store.getters['grid/fields'](this.origin, this.currentGrid);
 			},
 			fieldsSize: function() {
 				if (this.origin === 'columns') return {
-					gridTemplateColumns: this.$store.state.grids[this.currentGrid].templateColumns.join(' '),
-					gridColumnGap: this.$store.state.grids[this.currentGrid].columnsGap,
-					width: this.$store.state.grids[this.currentGrid].width,
-					justifyContent: this.$store.state.grids[this.currentGrid].justifyContent
+					gridTemplateColumns: this.$store.state.grid[this.currentGrid].templateColumns.join(' '),
+					gridColumnGap: this.$store.state.grid[this.currentGrid].columnsGap,
+					width: this.$store.state.grid[this.currentGrid].width,
+					justifyContent: this.$store.state.grid[this.currentGrid].justifyContent
 				}; else if (this.origin === 'rows') return {
-					gridTemplateRows: this.$store.state.grids[this.currentGrid].templateRows.join(' '),
-					gridRowGap: this.$store.state.grids[this.currentGrid].rowsGap,
-					height: this.$store.state.grids[this.currentGrid].height,
-					alignContent: this.$store.state.grids[this.currentGrid].alignContent,
+					gridTemplateRows: this.$store.state.grid[this.currentGrid].templateRows.join(' '),
+					gridRowGap: this.$store.state.grid[this.currentGrid].rowsGap,
+					height: this.$store.state.grid[this.currentGrid].height,
+					alignContent: this.$store.state.grid[this.currentGrid].alignContent,
 				}
 			}
 		},
@@ -33,7 +33,7 @@
 			resize: function(index, event) {
 				let value = event.target.value;
 				let origin = this.origin
-				this.$store.commit('resizeField', {origin, index, value})
+				this.$store.commit('grid/resizeField', {origin, index, value})
 			}
 		}
 	}

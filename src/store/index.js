@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import grids from './modules/grids'
+import grid from './modules/grid'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	modules: {
-		grids
+		grid
 	}
 })
 

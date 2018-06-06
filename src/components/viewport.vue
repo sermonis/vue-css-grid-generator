@@ -28,21 +28,18 @@ export default {
 	name: 'viewport',
 	computed: {
 		currentGrid: function() {
-			return this.$store.state.grids.currentGrid
+			return this.$store.state.grid.currentGrid
 		},
 		gridHeight: function(){
-			let containerHeight = this.$store.getters.containerStyles(this.currentGrid).height;
-			if (containerHeight) return containerHeight;
-			else return this.$store.state.grids[this.currentGrid].height
+			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
+			if (container) return container.height;
+			else return this.$store.state.grid[this.currentGrid].height
 		},
 		gridWidth: function(){
-			let containerWidth = this.$store.getters.containerStyles(this.currentGrid).width;
-			if (containerWidth) return containerWidth;
-			else return this.$store.state.grids[this.currentGrid].width
+			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
+			if (container) return container.width;
+			else return this.$store.state.grid[this.currentGrid].width
 		},
-		viewportItemsCount: function() {
-			return this.$store.getters.viewportItemsCount(this.currentGrid);
-		}
 	},
 }
 </script>

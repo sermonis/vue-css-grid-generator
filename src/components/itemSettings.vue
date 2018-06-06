@@ -54,41 +54,42 @@
 	export default {
 		name: 'itemSettings',
 		computed: {
-			currentGrid: { get() {return this.$store.state.grids.currentGrid},
+			currentGrid: { get() {
+				return this.$store.state.grid.currentGrid},
 			  set (value) {this.changeCurrentGrid(value)}
 			},
 			index: function() {
-				return this.$store.state.grids[this.currentGrid].selectedItem
+				return this.$store.state.grid[this.currentGrid].selectedItem
 			},
 			fromCol: { get() {
-				return this.$store.state.grids[this.currentGrid].items[this.index].fromCol},
+				return this.$store.state.grid[this.currentGrid].items[this.index].fromCol},
 			  set (value) {this.updateCellOption(value, 'fromCol', this.index)}
 			},
-			toCol: { get() {return this.$store.state.grids[this.currentGrid].items[this.index].toCol},
+			toCol: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].toCol},
 			  set (value) {this.updateCellOption(value, 'toCol', this.index)}
 			},
-			fromRow: { get() {return this.$store.state.grids[this.currentGrid].items[this.index].fromRow},
+			fromRow: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].fromRow},
 			  set (value) {this.updateCellOption(value, 'fromRow', this.index)}
 			},
-			toRow: { get() {return this.$store.state.grids[this.currentGrid].items[this.index].toRow},
+			toRow: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].toRow},
 			  set (value) {this.updateCellOption(value, 'toRow', this.index)}
 			},
-			justifySelf: { get() {return this.$store.state.grids[this.currentGrid].items[this.index].justifySelf},
+			justifySelf: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].justifySelf},
 			  set (value) {this.updateCellOption(value, 'justifySelf', this.index)}
 			},
-			alignSelf: { get() {return this.$store.state.grids[this.currentGrid].items[this.index].alignSelf},
+			alignSelf: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].alignSelf},
 			  set (value) {this.updateCellOption(value, 'alignSelf', this.index)}
 			},
 		},
 		methods: {
 			updateCellOption(value, field, index) {
-				this.$store.commit('changeCellOption', {value, field, index})
+				this.$store.commit('grid/changeCellOption', {value, field, index})
 			},
 			addGrid(event) {
-				this.$store.commit('addGrid', event.target[0].value)
+				this.$store.commit('grid/addGrid', event.target[0].value)
 			},
 			changeCurrentGrid(value) {
-				this.$store.commit('changeCurrentGrid', value)
+				this.$store.commit('grid/changeCurrentGrid', value)
 			}
 		}
 	}
