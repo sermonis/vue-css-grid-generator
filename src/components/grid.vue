@@ -113,8 +113,6 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		min-width: 30px;
-		min-height: 30px;
 		top: 0;
 		box-shadow: inset 0 0 0 1px #fff;
 		left: 0;
