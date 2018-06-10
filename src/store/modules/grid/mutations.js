@@ -44,7 +44,6 @@ const mutations = {
       Vue.set(state, 'container', sizes);
       Vue.set(state[value], 'cachedContainerSizes', sizes)
     } else {
-      console.log('else')
       Vue.set(state, 'container', state[value].cachedContainerSizes);
     }
   },

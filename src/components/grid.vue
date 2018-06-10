@@ -53,11 +53,20 @@
 				return this.$store.getters['grid/cellsSubGrids'](this.currentGrid)
 			}
 		},
-		// mounted(){
-		// 	let index = 1;
-		// 	let el = this.$refs.item;
-		// 	this.$store.commit('grid/selectItem', {index, el});
-		// },
+		mounted(){
+			let index = 1;
+			let refs = this.$refs;
+			let el = this.currentGrid + '' + index;
+			this.$store.commit('grid/selectItem', {index, el, refs});
+		},
+		watch: {
+			currentGrid: function() {
+				let index = 1;
+				let refs = this.$refs;
+				let el = this.currentGrid + '' + index;
+				this.$store.commit('grid/selectItem', {index, el, refs});
+			}
+		}
 	}
 </script>
 
