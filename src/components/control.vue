@@ -17,9 +17,11 @@
 			},
 			fieldsSize: function() {
 				let height = this.$store.state.grid[this.currentGrid].height;
-				if (/\d+(\.\d+)?%/.test(height)) height = '100%';
 				let width = this.$store.state.grid[this.currentGrid].width;
-				if (/\d+(\.\d+)?%/.test(width)) width = '100%';
+				if (this.currentGrid === 'root') {
+					if (/\d+(\.\d+)?%/.test(height)) height = '100%';
+					if (/\d+(\.\d+)?%/.test(width)) width = '100%';
+				}
 				if (this.origin === 'columns') return {
 					gridTemplateColumns: this.$store.state.grid[this.currentGrid].templateColumns.join(' '),
 					gridColumnGap: this.$store.state.grid[this.currentGrid].columnsGap,

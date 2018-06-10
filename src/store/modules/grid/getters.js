@@ -1,9 +1,11 @@
 const getters = {
 	gridStyle: state => (grid) => {
 		let height = state[grid].height;
-		if (/\d+(\.\d+)?%/.test(height)) height = '100%';
 		let width = state[grid].width;
-		if (/\d+(\.\d+)?%/.test(width)) width = '100%';
+		if(grid === 'root') {
+			if (/\d+(\.\d+)?%/.test(height)) height = '100%';
+			if (/\d+(\.\d+)?%/.test(width)) width = '100%';
+		}
 		return {
 			height: height,
 			width: width,
