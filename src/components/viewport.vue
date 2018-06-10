@@ -33,12 +33,22 @@ export default {
 		gridHeight: function(){
 			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
 			if (container) return container.height;
-			else return this.$store.state.grid[this.currentGrid].height
+			else {
+				let height = this.$store.state.grid[this.currentGrid].height;
+				console.log(height)
+				if (/\d+(\.\d+)?%/.test(height)) return 'calc(' + height + ' - 100px)'; 
+				else return height;
+			}
 		},
 		gridWidth: function(){
 			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
 			if (container) return container.width;
-			else return this.$store.state.grid[this.currentGrid].width
+			else {
+				let width = this.$store.state.grid[this.currentGrid].width;
+				console.log(width)
+				if (/\d+(\.\d+)?%/.test(width)) return 'calc(' + width + ' - 100px)'; 
+				else return width;
+			}
 		},
 	},
 }
@@ -85,8 +95,8 @@ export default {
 	 background: rgba(0,0,0, .2)
 	 }
  .viewport > div {
-	 border: 2px dashed #666;
 	 min-height: 50px;
+	 min-width: 50px;
 	 background: #212121;
 	 display: grid;
 	 color: #fff;

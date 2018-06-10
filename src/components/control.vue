@@ -16,15 +16,19 @@
 				return this.$store.getters['grid/fields'](this.origin, this.currentGrid);
 			},
 			fieldsSize: function() {
+				let height = this.$store.state.grid[this.currentGrid].height;
+				if (/\d+(\.\d+)?%/.test(height)) height = '100%';
+				let width = this.$store.state.grid[this.currentGrid].width;
+				if (/\d+(\.\d+)?%/.test(width)) width = '100%';
 				if (this.origin === 'columns') return {
 					gridTemplateColumns: this.$store.state.grid[this.currentGrid].templateColumns.join(' '),
 					gridColumnGap: this.$store.state.grid[this.currentGrid].columnsGap,
-					width: this.$store.state.grid[this.currentGrid].width,
+					width: width,
 					justifyContent: this.$store.state.grid[this.currentGrid].justifyContent
 				}; else if (this.origin === 'rows') return {
 					gridTemplateRows: this.$store.state.grid[this.currentGrid].templateRows.join(' '),
 					gridRowGap: this.$store.state.grid[this.currentGrid].rowsGap,
-					height: this.$store.state.grid[this.currentGrid].height,
+					height: height,
 					alignContent: this.$store.state.grid[this.currentGrid].alignContent,
 				}
 			}

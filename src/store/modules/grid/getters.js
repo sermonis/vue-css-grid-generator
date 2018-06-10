@@ -1,8 +1,12 @@
 const getters = {
 	gridStyle: state => (grid) => {
+		let height = state[grid].height;
+		if (/\d+(\.\d+)?%/.test(height)) height = '100%';
+		let width = state[grid].width;
+		if (/\d+(\.\d+)?%/.test(width)) width = '100%';
 		return {
-			height: state[grid].height,
-			width: state[grid].width,
+			height: height,
+			width: width,
 			gridColumnGap: state[grid].columnsGap,
 			gridRowGap: state[grid].rowsGap,
 			gridTemplateColumns: state[grid].templateColumns.join(' '),

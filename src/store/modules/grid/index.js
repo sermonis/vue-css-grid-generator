@@ -10,7 +10,7 @@ const state = {
 	currentGrid: 'root',
 	root: {
 		width: '820px',
-		height: '640px',
+		height: '100%',
 		columns: 3,
 		rows: 3,
 		columnsGap: '0',
