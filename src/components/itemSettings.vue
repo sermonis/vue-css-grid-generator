@@ -11,6 +11,12 @@
 			</div>
 
 			<div>
+				<label for="padding-horizontal">Padding Horizontal:</label> <input id="padding-horizontal" type="text">
+				<label for="padding-vertical">Padding Vertical:</label> <input id="padding-vertical" type="text">
+			</div>
+
+
+			<div>
 				<label for="justify-self">Align Horizontal:</label> <select id="justify-self" v-model="justifySelf">
 				  <option value="start">Left</option>
 				  <option value="end">Right</option>
@@ -27,6 +33,28 @@
 					<option value="auto">auto</option>
 				</select>
 			</div>
+
+
+			<div>
+				<label for="zoom">Zoom:</label>
+				<select v-model="zoom" id="zoom">
+					<option value="2">200%</option>
+					<option value="1.5">150%</option>
+					<option value="1.25">125%</option>
+					<option value="1">100%</option>
+					<option value="0.75">75%</option>
+					<option value="0.5">50%</option>
+					<option value="0.25">25%</option>
+				</select>
+				<label for="apply-grid">Apply Grid:</label>
+
+				<select id="apply-grid">
+					<option value="root">None</option>
+					<option value="lol">lol</option>
+					<option value="kek">kek</option>
+				</select>
+			</div>
+
 		</div>
 
 		<div class="sub-grid">
@@ -54,6 +82,10 @@
 	export default {
 		name: 'itemSettings',
 		computed: {
+			zoom: {
+				get() {return this.$store.state.grid.zoom},
+				set(value) {this.$store.commit('grid/changeZoom', value)}
+			},
 			currentGrid: { get() {
 				return this.$store.state.grid.currentGrid},
 			  set (value) {this.changeCurrentGrid(value)}

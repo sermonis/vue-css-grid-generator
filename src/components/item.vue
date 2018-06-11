@@ -51,7 +51,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background: #6799ad;
+		background: #604c8d;
 		opacity: .8;
 		justify-content: center;
 		z-index: 2;

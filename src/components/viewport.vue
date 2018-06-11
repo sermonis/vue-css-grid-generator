@@ -27,6 +27,9 @@ export default {
 	},
 	name: 'viewport',
 	computed: {
+		zoom: function() {
+			return this.$store.state.grid.zoom;
+		},
 		currentGrid: function() {
 			return this.$store.state.grid.currentGrid
 		},
@@ -34,8 +37,15 @@ export default {
 			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
 			if (container) return container.height;
 			else {
+				// * * * Magic * * *
 				let height = this.$store.state.grid[this.currentGrid].height;
-				console.log(height)
+				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
+				if (height !== 'auto') {
+					let group = height.split(divideIntoGroups)
+					let value = parseFloat(group[1]);
+					let unit = group[6]
+					height = value * parseFloat(this.zoom) + unit;
+				}
 				if (/\d+(\.\d+)?%/.test(height)) return 'calc(' + height + ' - 100px)'; 
 				else return height;
 			}
@@ -45,7 +55,13 @@ export default {
 			if (container) return container.width;
 			else {
 				let width = this.$store.state.grid[this.currentGrid].width;
-				console.log(width)
+				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
+				if (width !== 'auto') {
+					let group = width.split(divideIntoGroups)
+					let value = parseFloat(group[1]);
+					let unit = group[6]
+					width = value * parseFloat(this.zoom) + unit;
+				}
 				if (/\d+(\.\d+)?%/.test(width)) return 'calc(' + width + ' - 100px)'; 
 				else return width;
 			}

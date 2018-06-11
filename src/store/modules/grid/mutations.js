@@ -22,31 +22,43 @@ const mutations = {
 		templateColumns: ['1fr', '1fr'],
 		templateRows: ['1fr', '1fr'],
 		items: [ 
-    {fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
 		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
 		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
 		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'}
 		]
 	});
-    Vue.set(state[value], 'container', state.selectedElement);
+		Vue.set(state[value], 'container', state.selectedElement);
 	},
 	changeCurrentGrid(state, value) {
-    state.currentGrid = value
-    if (value === 'root') Vue.set(state, 'container', {
-      width: state[value].width,
-      height: state[value].height
-    });
-    else if (state.refs[state[value].container][0]) {
-      let sizes = {
-        width: state.refs[state[value].container][0].$el.clientWidth + 'px',
-        height: state.refs[state[value].container][0].$el.clientHeight + 'px'
-      }
-      Vue.set(state, 'container', sizes);
-      Vue.set(state[value], 'cachedContainerSizes', sizes)
-    } else {
-      Vue.set(state, 'container', state[value].cachedContainerSizes);
-    }
-  },
+		// Change current grid to selected or created
+		state.currentGrid = value;
+
+		// Loop through grids and set cached container sizes if it's possible from current view
+		for (let grid in state) {
+			if (state[grid].container && state.refs[state[grid].container][0]) {
+				let sizes = {
+					width: state.refs[state[grid].container][0].$el.clientWidth + 'px',
+					height: state.refs[state[grid].container][0].$el.clientHeight + 'px'
+				}
+				Vue.set(state[grid], 'cachedContainerSizes', sizes)
+			}
+		}
+
+		// Set original grid sizes to container if selected grid is root
+		if (value === 'root') Vue.set(state, 'container', {
+			width: state[value].width,
+			height: state[value].height
+		});
+		
+		// In other case set cached value
+		 else {
+			Vue.set(state, 'container', state[value].cachedContainerSizes);
+		}
+	},
+	changeZoom(state, value) {
+		state.zoom = value;
+	},
 	changeOption(state, {value, field}) {
 		state[state.currentGrid][field] = value;
 		if (field == 'columns' && value !== state[state.currentGrid].templateColumns.length)	{
@@ -95,8 +107,8 @@ const mutations = {
 		}
 	},
 	selectItem(state, {index, el, refs}) {
-    Vue.set(state[state.currentGrid], 'selectedItem', index - 1);
-    Vue.set(state, 'refs', refs)
+		Vue.set(state[state.currentGrid], 'selectedItem', index - 1);
+		Vue.set(state, 'refs', refs)
 		state.selectedElement = el;
 	}
 }

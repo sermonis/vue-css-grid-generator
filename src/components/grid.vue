@@ -31,6 +31,9 @@
 			}
 		},
 		computed: {
+			zoom: function() {
+				return this.$store.state.grid.zoom;
+			},
 			currentGrid: function() {
 				return this.$store.state.grid.currentGrid
 			},
@@ -62,6 +65,12 @@
 		watch: {
 			currentGrid: function() {
 				let index = 1;
+				let refs = this.$refs;
+				let el = this.currentGrid + '' + index;
+				this.$store.commit('grid/selectItem', {index, el, refs});
+			},
+			zoom: function() {
+				let index = this.index ? this.index : 1;
 				let refs = this.$refs;
 				let el = this.currentGrid + '' + index;
 				this.$store.commit('grid/selectItem', {index, el, refs});

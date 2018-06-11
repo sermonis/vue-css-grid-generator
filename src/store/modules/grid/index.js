@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 const state = {
 	currentGrid: 'root',
+	zoom: '1',
 	root: {
 		width: '820px',
 		height: '100%',

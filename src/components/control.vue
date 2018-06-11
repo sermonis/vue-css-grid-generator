@@ -9,6 +9,9 @@
 		name: 'control',
 		props: ['origin'],
 		computed: {
+			zoom: function() {
+				return this.$store.state.grid.zoom;
+			},
 			currentGrid: function() {
 				return this.$store.state.grid.currentGrid
 			},
@@ -21,6 +24,19 @@
 				if (this.currentGrid === 'root') {
 					if (/\d+(\.\d+)?%/.test(height)) height = '100%';
 					if (/\d+(\.\d+)?%/.test(width)) width = '100%';
+				}
+				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
+				if (width !== 'auto' && width !== 'auto' && !/\d+(\.\d+)?%/.test(width)) {
+					let group = width.split(divideIntoGroups)
+					let value = parseFloat(group[1]);
+					let unit = group[6]
+					width = value * parseFloat(this.zoom) + unit;
+				}
+				if (height !== 'auto' && height !== 'auto' && !/\d+(\.\d+)?%/.test(height)) {
+					let group = height.split(divideIntoGroups)
+					let value = parseFloat(group[1]);
+					let unit = group[6]
+					height = value * parseFloat(this.zoom) + unit;
 				}
 				if (this.origin === 'columns') return {
 					gridTemplateColumns: this.$store.state.grid[this.currentGrid].templateColumns.join(' '),

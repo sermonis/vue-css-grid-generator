@@ -6,6 +6,19 @@ const getters = {
 			if (/\d+(\.\d+)?%/.test(height)) height = '100%';
 			if (/\d+(\.\d+)?%/.test(width)) width = '100%';
 		}
+		let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
+		if (width !== 'auto' && width !== 'auto' && !/\d+(\.\d+)?%/.test(width)) {
+			let group = width.split(divideIntoGroups)
+			let value = parseFloat(group[1]);
+			let unit = group[6]
+			width = value * parseFloat(state.zoom) + unit;
+		}
+		if (height !== 'auto' && height !== 'auto' && !/\d+(\.\d+)?%/.test(height)) {
+			let group = height.split(divideIntoGroups)
+			let value = parseFloat(group[1]);
+			let unit = group[6]
+			height = value * parseFloat(state.zoom) + unit;
+		}
 		return {
 			height: height,
 			width: width,
@@ -22,10 +35,24 @@ const getters = {
 	},
 	containerStyles: (state, getters) => grid => {
 		if (state[grid].container) {
-		console.log(state.container);
+		let width = state.container.width;
+		let height = state.container.height;
+		// let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
+		// if (width !== 'auto' && width !== 'auto' && !/\d+(\.\d+)?%/.test(width)) {
+		// 	let group = width.split(divideIntoGroups)
+		// 	let value = parseFloat(group[1]);
+		// 	let unit = group[6]
+		// 	width = value * parseFloat(state.zoom) + unit;
+		// }
+		// if (height !== 'auto' && height !== 'auto' && !/\d+(\.\d+)?%/.test(height)) {
+		// 	let group = height.split(divideIntoGroups)
+		// 	let value = parseFloat(group[1]);
+		// 	let unit = group[6]
+		// 	height = value * parseFloat(state.zoom) + unit;
+		// }
 		return {
-			width: state.container.width,
-			height: state.container.height
+			width: width,
+			height: height
 		}}
 	},
 	cellStyles: (state, getters) => (grid) => {
