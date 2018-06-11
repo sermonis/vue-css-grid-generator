@@ -2,30 +2,48 @@ const getters = {
 	gridStyle: state => (grid) => {
 		let height = state[grid].height;
 		let width = state[grid].width;
+		let gridTemplateColumns = state[grid].templateColumns;
+		let gridTemplateRows = state[grid].templateRows;
+		let gridRowGap = state[grid].rowsGap;
+		let gridColumnGap = state[grid].columnsGap;
+
+		function applyZoom(value) {
+			let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|fr|vw|vh|in|cm|mm|pt|pc)$/gm;
+			if (value !== 'auto' && value !== 'auto' && !/\d+(\.\d+)?%/.test(value)) {
+				let group = value.split(divideIntoGroups)
+				let num = parseFloat(group[1]);
+				let unit = group[6]
+				if (unit !== 'fr') value = num * parseFloat(state.zoom) + unit;
+			}
+			return value
+		}
+
+		// If height or/and width of grid root element has % unit it should be seted to 100%
+		// Because real % value is already seted to root grid container.
 		if(grid === 'root') {
 			if (/\d+(\.\d+)?%/.test(height)) height = '100%';
 			if (/\d+(\.\d+)?%/.test(width)) width = '100%';
 		}
-		let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
-		if (width !== 'auto' && width !== 'auto' && !/\d+(\.\d+)?%/.test(width)) {
-			let group = width.split(divideIntoGroups)
-			let value = parseFloat(group[1]);
-			let unit = group[6]
-			width = value * parseFloat(state.zoom) + unit;
-		}
-		if (height !== 'auto' && height !== 'auto' && !/\d+(\.\d+)?%/.test(height)) {
-			let group = height.split(divideIntoGroups)
-			let value = parseFloat(group[1]);
-			let unit = group[6]
-			height = value * parseFloat(state.zoom) + unit;
-		}
+
+		// Apply Zoom
+		height = applyZoom(height);
+		width = applyZoom(width);
+		gridColumnGap = applyZoom(gridColumnGap);
+		gridRowGap = applyZoom(gridRowGap);
+		gridTemplateColumns = gridTemplateColumns.map(function(value) {
+			return applyZoom(value);
+		})
+		gridTemplateRows = gridTemplateRows.map(function(value) {
+			return applyZoom(value);
+		});
+
 		return {
 			height: height,
 			width: width,
-			gridColumnGap: state[grid].columnsGap,
-			gridRowGap: state[grid].rowsGap,
-			gridTemplateColumns: state[grid].templateColumns.join(' '),
-			gridTemplateRows: state[grid].templateRows.join(' '),
+			gridColumnGap: gridColumnGap,
+			gridRowGap: gridRowGap,
+			gridTemplateColumns: gridTemplateColumns.join(' '),
+			gridTemplateRows: gridTemplateRows.join(' '),
 			gridAutoFlow: state[grid].gridAutoFlow,
 			justifyContent: state[grid].justifyContent,
 			justifyItems: state[grid].justifyItems,
@@ -37,19 +55,6 @@ const getters = {
 		if (state[grid].container) {
 		let width = state.container.width;
 		let height = state.container.height;
-		// let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
-		// if (width !== 'auto' && width !== 'auto' && !/\d+(\.\d+)?%/.test(width)) {
-		// 	let group = width.split(divideIntoGroups)
-		// 	let value = parseFloat(group[1]);
-		// 	let unit = group[6]
-		// 	width = value * parseFloat(state.zoom) + unit;
-		// }
-		// if (height !== 'auto' && height !== 'auto' && !/\d+(\.\d+)?%/.test(height)) {
-		// 	let group = height.split(divideIntoGroups)
-		// 	let value = parseFloat(group[1]);
-		// 	let unit = group[6]
-		// 	height = value * parseFloat(state.zoom) + unit;
-		// }
 		return {
 			width: width,
 			height: height

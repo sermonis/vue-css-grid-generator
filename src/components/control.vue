@@ -21,31 +21,44 @@
 			fieldsSize: function() {
 				let height = this.$store.state.grid[this.currentGrid].height;
 				let width = this.$store.state.grid[this.currentGrid].width;
+				let zoom = this.zoom;
+				let gridTemplateColumns = this.$store.state.grid[this.currentGrid].templateColumns;
+				let gridTemplateRows = this.$store.state.grid[this.currentGrid].templateRows;
+				let gridColumnGap = this.$store.state.grid[this.currentGrid].columnsGap;
+				let gridRowGap = this.$store.state.grid[this.currentGrid].rowsGap;
+
+				function applyZoom(value) {
+					let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|vw|vh|em|ex|%|fr|in|cm|mm|pt|pc)$/gm;
+					if (value !== 'auto' && value !== 'auto' && !/\d+(\.\d+)?%/.test(value)) {
+						let group = value.split(divideIntoGroups)
+						let num = parseFloat(group[1]);
+						let unit = group[6]
+						if (unit !== 'fr') value = num * parseFloat(	zoom) + unit;
+					}
+					return value
+				}
 				if (this.currentGrid === 'root') {
 					if (/\d+(\.\d+)?%/.test(height)) height = '100%';
 					if (/\d+(\.\d+)?%/.test(width)) width = '100%';
 				}
-				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
-				if (width !== 'auto' && width !== 'auto' && !/\d+(\.\d+)?%/.test(width)) {
-					let group = width.split(divideIntoGroups)
-					let value = parseFloat(group[1]);
-					let unit = group[6]
-					width = value * parseFloat(this.zoom) + unit;
-				}
-				if (height !== 'auto' && height !== 'auto' && !/\d+(\.\d+)?%/.test(height)) {
-					let group = height.split(divideIntoGroups)
-					let value = parseFloat(group[1]);
-					let unit = group[6]
-					height = value * parseFloat(this.zoom) + unit;
-				}
+				height = applyZoom(height);
+				width = applyZoom(width);
+				gridColumnGap = applyZoom(gridColumnGap);
+				gridRowGap = applyZoom(gridRowGap);
+				gridTemplateColumns = gridTemplateColumns.map(function(value) {
+					return applyZoom(value);
+				})
+				gridTemplateRows = gridTemplateRows.map(function(value) {
+					return applyZoom(value);
+				});
 				if (this.origin === 'columns') return {
-					gridTemplateColumns: this.$store.state.grid[this.currentGrid].templateColumns.join(' '),
-					gridColumnGap: this.$store.state.grid[this.currentGrid].columnsGap,
+					gridTemplateColumns: gridTemplateColumns.join(' '),
+					gridColumnGap: gridColumnGap,
 					width: width,
 					justifyContent: this.$store.state.grid[this.currentGrid].justifyContent
 				}; else if (this.origin === 'rows') return {
-					gridTemplateRows: this.$store.state.grid[this.currentGrid].templateRows.join(' '),
-					gridRowGap: this.$store.state.grid[this.currentGrid].rowsGap,
+					gridTemplateRows: gridTemplateRows.join(' '),
+					gridRowGap: gridRowGap,
 					height: height,
 					alignContent: this.$store.state.grid[this.currentGrid].alignContent,
 				}

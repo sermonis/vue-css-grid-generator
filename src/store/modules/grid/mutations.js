@@ -50,7 +50,7 @@ const mutations = {
 			width: state[value].width,
 			height: state[value].height
 		});
-		
+
 		// In other case set cached value
 		 else {
 			Vue.set(state, 'container', state[value].cachedContainerSizes);
