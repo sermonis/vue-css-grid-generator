@@ -34,11 +34,14 @@
 			zoom: function() {
 				return this.$store.state.grid.zoom;
 			},
-			containerStyles: function() {
-				return this.$store.getters['grid/containerStyles'](this.currentGrid)
-			},
 			currentGrid: function() {
 				return this.$store.state.grid.currentGrid
+			},
+			containerStyles: function() {
+				if (this.$store.state.grid[this.currentGrid].container) return {
+					justifyContent: this.$store.getters['grid/containerStyles'](this.currentGrid).justifyContent,
+					alignItems: this.$store.getters['grid/containerStyles'](this.currentGrid).alignItems,
+				}
 			},
 			gridStyle: function() {
 				return this.$store.getters['grid/gridStyle'](this.currentGrid)

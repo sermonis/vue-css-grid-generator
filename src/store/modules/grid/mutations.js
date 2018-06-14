@@ -36,6 +36,7 @@ const mutations = {
 	changeCurrentGrid(state, value) {
 		// Change current grid to selected or created
 		state.currentGrid = value;
+		let zoom = state.zoom;
 
 		// Loop through grids and set cached container sizes if it's possible from current view
 		for (let grid in state) {
@@ -43,8 +44,8 @@ const mutations = {
 				state.refs[state[grid].container][0].$el.style.height = '100%';
 				state.refs[state[grid].container][0].$el.style.width = '100%';
 				let sizes = {
-					width: state.refs[state[grid].container][0].$el.clientWidth + 'px',
-					height: state.refs[state[grid].container][0].$el.clientHeight + 'px'
+					width: state.refs[state[grid].container][0].$el.clientWidth / zoom + 'px',
+					height: state.refs[state[grid].container][0].$el.clientHeight / zoom + 'px'
 				}
 				Vue.set(state[grid], 'cachedContainerSizes', sizes)
 			}

@@ -48,36 +48,48 @@ export default {
 			}
 		},
 		gridHeight: function(){
-			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
-			if (container) return container.height;
-			else {
-				let height = this.$store.state.grid[this.currentGrid].height;
-				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|vw|vh|ex|%|in|cm|mm|pt|pc)$/gm;
-				if (height !== 'auto') {
-					let group = height.split(divideIntoGroups)
-					let value = parseFloat(group[1]);
+			let zoom = this.zoom;
+			function applyZoom(value) {
+				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|fr|vw|vh|in|cm|mm|pt|pc)$/gm;
+				if ( value !== 'auto' && value !== 'auto' && !/\d+(\.\d+)?%/.test(value)) {
+					let group = value.split(divideIntoGroups)
+					let num = parseFloat(group[1]);
 					let unit = group[6]
-					height = value * parseFloat(this.zoom) + unit;
+					if (unit && unit !== 'fr') value = num * parseFloat(zoom) + unit;
 				}
-				if (/\d+(\.\d+)?%/.test(height)) return 'calc(100% - 100px)'; 
-				else return height;
+				return value
 			}
+			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
+			let height;
+			if (container) height = container.height;
+			else height = this.$store.state.grid[this.currentGrid].height;
+			if (height !== 'auto') {
+				height = applyZoom(height);
+			}
+			if (/\d+(\.\d+)?%/.test(height)) return 'calc(100% - 100px)'; 
+			else return height;
 		},
 		gridWidth: function(){
-			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
-			if (container) return container.width;
-			else {
-				let width = this.$store.state.grid[this.currentGrid].width;
-				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|vw|vh|%|in|cm|mm|pt|pc)$/gm;
-				if (width !== 'auto') {
-					let group = width.split(divideIntoGroups)
-					let value = parseFloat(group[1]);
+			let zoom = this.zoom;
+			function applyZoom(value) {
+				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|fr|vw|vh|in|cm|mm|pt|pc)$/gm;
+				if ( value !== 'auto' && value !== 'auto' && !/\d+(\.\d+)?%/.test(value)) {
+					let group = value.split(divideIntoGroups)
+					let num = parseFloat(group[1]);
 					let unit = group[6]
-					width = value * parseFloat(this.zoom) + unit;
+					if (unit && unit !== 'fr') value = num * parseFloat(zoom) + unit;
 				}
-				if (/\d+(\.\d+)?%/.test(width)) return 'calc(100% - 100px)'; 
-				else return width;
+				return value
 			}
+			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
+			let width;
+			if (container) width = container.width;
+			else width = this.$store.state.grid[this.currentGrid].width;
+			if (width !== 'auto') {
+				width = applyZoom(width);
+			}
+			if (/\d+(\.\d+)?%/.test(width)) return 'calc(100% - 100px)'; 
+			else return width;
 		},
 	},
 }
