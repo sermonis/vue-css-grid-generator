@@ -31,30 +31,31 @@
 	}
 </script>
 
-<style scoped>
-	.item {
+<style scoped lang="stylus">
+	.item
 		display: flex;
-		justify-content: center;
-		align-items: center;
-		box-sizing: border-box;
-	}
-	.sub-item .item {
-		box-shadow: inset 0 0 0 1px #666;
-	}
-	.item div {
-		position: relative;
-		z-index: 3;
-	}
-	.item span {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: #604c8d;
-		opacity: .8;
-		justify-content: center;
-		z-index: 2;
-		align-items: center;
-	}
+		justify-content center
+		align-items center
+		box-sizing border-box
+		overflow hidden
+		min-height 1em
+		min-width 1em
+		background rgba(#604c8d, .4)
+
+	.sub-item .item 
+		box-shadow inset 0 0 0 1px #666
+	.item div 
+		position relative
+		z-index 3
+	.item span 
+		position absolute
+		top 0
+		left 0
+		right 0
+		bottom 0
+		background #604c8d
+		opacity .8
+		justify-content center
+		z-index 2
+		align-items center
 </style>

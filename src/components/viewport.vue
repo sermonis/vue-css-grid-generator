@@ -1,18 +1,18 @@
 <template>
 	<div class="viewport" :style="{gridTemplateColumns: '1fr ' + gridWidth + ' 1fr', gridTemplateRows: '1fr ' + gridHeight + ' 1fr'}">
-		<div class="top-control">
+		<div :style="columnsControls" class="top-control">
 			<control origin='columns'></control>
 		</div>
-		<div class="left-control">
+		<div :style="rowsControls" class="left-control">
 			<control origin='rows'></control>
 		</div>
 		<div class="grid-cell">
 			<grid></grid>
 		</div>
-		<div class="right-control">
+		<div :style="rowsControls" class="right-control">
 			<control origin='rows'></control>
 		</div>
-		<div class="bottom-control">
+		<div :style="columnsControls" class="bottom-control">
 			<control origin='columns'></control>
 		</div>
 	</div>
@@ -33,20 +33,33 @@ export default {
 		currentGrid: function() {
 			return this.$store.state.grid.currentGrid
 		},
+		rowsControls: function() {
+			if (this.currentGrid !== 'root') {
+				return {
+					alignItems: this.$store.getters['grid/containerStyles'](this.currentGrid).alignItems
+				}
+			}
+		},
+		columnsControls: function() {
+			if (this.currentGrid !== 'root') {
+				return {
+					justifyItems: this.$store.getters['grid/containerStyles'](this.currentGrid).justifyContent
+				}
+			}
+		},
 		gridHeight: function(){
 			let container = this.$store.getters['grid/containerStyles'](this.currentGrid);
 			if (container) return container.height;
 			else {
-				// * * * Magic * * *
 				let height = this.$store.state.grid[this.currentGrid].height;
-				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
+				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|vw|vh|ex|%|in|cm|mm|pt|pc)$/gm;
 				if (height !== 'auto') {
 					let group = height.split(divideIntoGroups)
 					let value = parseFloat(group[1]);
 					let unit = group[6]
 					height = value * parseFloat(this.zoom) + unit;
 				}
-				if (/\d+(\.\d+)?%/.test(height)) return 'calc(' + height + ' - 100px)'; 
+				if (/\d+(\.\d+)?%/.test(height)) return 'calc(100% - 100px)'; 
 				else return height;
 			}
 		},
@@ -55,14 +68,14 @@ export default {
 			if (container) return container.width;
 			else {
 				let width = this.$store.state.grid[this.currentGrid].width;
-				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|in|cm|mm|pt|pc)$/gm;
+				let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|vw|vh|%|in|cm|mm|pt|pc)$/gm;
 				if (width !== 'auto') {
 					let group = width.split(divideIntoGroups)
 					let value = parseFloat(group[1]);
 					let unit = group[6]
 					width = value * parseFloat(this.zoom) + unit;
 				}
-				if (/\d+(\.\d+)?%/.test(width)) return 'calc(' + width + ' - 100px)'; 
+				if (/\d+(\.\d+)?%/.test(width)) return 'calc(100% - 100px)'; 
 				else return width;
 			}
 		},
@@ -111,8 +124,8 @@ export default {
 	 background: rgba(0,0,0, .2)
 	 }
  .viewport > div {
-	 min-height: 50px;
-	 min-width: 50px;
+	 min-height: 2em;
+	 min-width: 2em;
 	 background: #212121;
 	 display: grid;
 	 color: #fff;

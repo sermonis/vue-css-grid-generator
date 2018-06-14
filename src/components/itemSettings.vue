@@ -11,12 +11,6 @@
 			</div>
 
 			<div>
-				<label for="padding-horizontal">Padding Horizontal:</label> <input id="padding-horizontal" type="text">
-				<label for="padding-vertical">Padding Vertical:</label> <input id="padding-vertical" type="text">
-			</div>
-
-
-			<div>
 				<label for="justify-self">Align Horizontal:</label> <select id="justify-self" v-model="justifySelf">
 				  <option value="start">Left</option>
 				  <option value="end">Right</option>

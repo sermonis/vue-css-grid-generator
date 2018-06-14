@@ -9,11 +9,11 @@ const getters = {
 
 		function applyZoom(value) {
 			let divideIntoGroups = /((\d+)((.)?(\d)+)?)(px|em|ex|%|fr|vw|vh|in|cm|mm|pt|pc)$/gm;
-			if (value !== 'auto' && value !== 'auto' && !/\d+(\.\d+)?%/.test(value)) {
+			if ( value !== 'auto' && value !== 'auto' && !/\d+(\.\d+)?%/.test(value)) {
 				let group = value.split(divideIntoGroups)
 				let num = parseFloat(group[1]);
 				let unit = group[6]
-				if (unit !== 'fr') value = num * parseFloat(state.zoom) + unit;
+				if (unit && unit !== 'fr') value = num * parseFloat(state.zoom) + unit;
 			}
 			return value
 		}
@@ -55,9 +55,15 @@ const getters = {
 		if (state[grid].container) {
 		let width = state.container.width;
 		let height = state.container.height;
+		let parentGrid = state[grid].parentGrid;
+		let parentIndex = state[grid].parentIndex;
+		let justifyContent = state[parentGrid].items[parentIndex].justifySelf;
+		let alignItems = state[parentGrid].items[parentIndex].alignSelf;
 		return {
 			width: width,
-			height: height
+			height: height,
+			justifyContent: justifyContent,
+			alignItems: alignItems
 		}}
 	},
 	cellStyles: (state, getters) => (grid) => {
@@ -70,7 +76,7 @@ const getters = {
 					justifySelf: item.justifySelf,
 					alignSelf: item.alignSelf,
 					... getters.gridStyle(item.subGrid),
-					display: 'inline-grid'
+					display: 'inline-grid',
 				})
 			} else {
 				styles.push({

@@ -11,7 +11,7 @@ const state = {
 	zoom: '1',
 	root: {
 		width: '820px',
-		height: '100%',
+		height: 'auto',
 		columns: 3,
 		rows: 3,
 		columnsGap: '0',

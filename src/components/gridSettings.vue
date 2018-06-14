@@ -114,10 +114,6 @@
 				<label for="grid-class">Grid Class (opt.)</label>
 				<input type="text" id="grid-class">
 			</div>
-			<div>
-				<label for="use-areas">Use Areas (if possible)</label>
-				<input type="checkbox">
-			</div>
 		</div>
 	</div>
 </div>

@@ -33,7 +33,7 @@
 						let group = value.split(divideIntoGroups)
 						let num = parseFloat(group[1]);
 						let unit = group[6]
-						if (unit !== 'fr') value = num * parseFloat(	zoom) + unit;
+						if (unit && unit !== 'fr') value = num * parseFloat(	zoom) + unit;
 					}
 					return value
 				}

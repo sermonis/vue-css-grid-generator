@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div :style="containerStyles" class="container">
 		<div :style="gridStyle" class="grid">
 			<div class="cell-container" v-bind:key="i" v-for="i in cellsCount">
 				<div class="cell">
@@ -33,6 +33,9 @@
 		computed: {
 			zoom: function() {
 				return this.$store.state.grid.zoom;
+			},
+			containerStyles: function() {
+				return this.$store.getters['grid/containerStyles'](this.currentGrid)
 			},
 			currentGrid: function() {
 				return this.$store.state.grid.currentGrid
@@ -86,10 +89,9 @@
 	}
 	.container {
 		position: relative;
+		display: flex;
 	}
 	.overlay {
-		top: 0;
-		left: 0;
 		position: absolute;
 	}
 	.grid.overlay > div {

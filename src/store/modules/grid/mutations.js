@@ -4,6 +4,7 @@ const mutations = {
 	addGrid(state, value) {
 		let currentGrid = state.currentGrid;
 		let selectedItem = state[currentGrid].selectedItem;
+		let selectedIndex = state.selectedIndex;
 		Vue.set(state[currentGrid].items[selectedItem], 'subGrid', value)
 		Vue.set(state, value, {
 		columns: 2,
@@ -18,6 +19,8 @@ const mutations = {
 		alignContent: 'start',
 		selectedItem: 0,
 		justifyItems: 'stretch',
+		parentIndex: selectedIndex,
+		parentGrid: currentGrid,
 		alignItems: 'stretch',
 		templateColumns: ['1fr', '1fr'],
 		templateRows: ['1fr', '1fr'],
@@ -37,6 +40,8 @@ const mutations = {
 		// Loop through grids and set cached container sizes if it's possible from current view
 		for (let grid in state) {
 			if (state[grid].container && state.refs[state[grid].container][0]) {
+				state.refs[state[grid].container][0].$el.style.height = '100%';
+				state.refs[state[grid].container][0].$el.style.width = '100%';
 				let sizes = {
 					width: state.refs[state[grid].container][0].$el.clientWidth + 'px',
 					height: state.refs[state[grid].container][0].$el.clientHeight + 'px'
@@ -108,7 +113,8 @@ const mutations = {
 	},
 	selectItem(state, {index, el, refs}) {
 		Vue.set(state[state.currentGrid], 'selectedItem', index - 1);
-		Vue.set(state, 'refs', refs)
+		Vue.set(state, 'refs', refs);
+		state.selectedIndex = index - 1;
 		state.selectedElement = el;
 	}
 }
