@@ -66,7 +66,7 @@ export default {
 			if (height !== 'auto') {
 				height = applyZoom(height);
 			}
-			if (/\d+(\.\d+)?%/.test(height)) return 'calc(100% - 100px)'; 
+			if (/\d+(\.\d+)?%/.test(height)) return 'calc(100% - 3em)'; 
 			else return height;
 		},
 		gridWidth: function(){
@@ -88,7 +88,7 @@ export default {
 			if (width !== 'auto') {
 				width = applyZoom(width);
 			}
-			if (/\d+(\.\d+)?%/.test(width)) return 'calc(100% - 100px)'; 
+			if (/\d+(\.\d+)?%/.test(width)) return 'calc(100% - 3em)'; 
 			else return width;
 		},
 	},
@@ -136,8 +136,8 @@ export default {
 	 background: rgba(0,0,0, .2)
 	 }
  .viewport > div {
-	 min-height: 2em;
-	 min-width: 2em;
+	 min-height: 3em;
+	 min-width: 3em;
 	 background: #212121;
 	 display: grid;
 	 color: #fff;

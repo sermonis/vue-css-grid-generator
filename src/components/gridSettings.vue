@@ -19,11 +19,11 @@
 			<div>
 				<div>
 					<label for="columns-count">Columns:</label>
-					<input id="columns-count" v-model='columns' type="text">
+					<input min=1 id="columns-count" v-model.number='columns' type="number">
 				</div>
 				<div>
 					<label for="rows-count">Rows:</label>
-					<input id="rows-count" v-model='rows' type="text">
+					<input min=1 id="rows-count" v-model.number='rows' type="number">
 				</div>
 			</div>
 		</div>

@@ -9,9 +9,10 @@ Vue.use(Vuex);
 const state = {
 	currentGrid: 'root',
 	zoom: '1',
+	gridsList: ['root', 'none'],
 	root: {
 		width: '820px',
-		height: 'auto',
+		height: '100%',
 		columns: 3,
 		rows: 3,
 		columnsGap: '0',
@@ -26,11 +27,11 @@ const state = {
 		templateRows: ['1fr', '1fr', '1fr'],
 		selectedItem: 0,
 		items: [
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'}
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto', subGrid: 'none'},
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto', subGrid: 'none'},
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto', subGrid: 'none'},
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto', subGrid: 'none'},
+		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto', subGrid: 'none'}
 		]
 	},
 }

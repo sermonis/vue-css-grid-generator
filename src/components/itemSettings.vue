@@ -42,10 +42,8 @@
 				</select>
 				<label for="apply-grid">Apply Grid:</label>
 
-				<select id="apply-grid">
-					<option value="root">None</option>
-					<option value="lol">lol</option>
-					<option value="kek">kek</option>
+				<select v-model="itemSubGrid" id="apply-grid">
+					<option v-if="checkStackOverflow(i)" v-for="i in $store.state.grid.gridsList" :key="i" :value="i">{{i}}</option>
 				</select>
 			</div>
 
@@ -54,9 +52,9 @@
 		<div class="sub-grid">
 			<label for="current-grid">Current Grid:</label>
 			<select id="current-grid" v-model="currentGrid">
-				<option value="root">Root</option>
-				<option value="lol">lol</option>
-				<option value="kek">kek</option>
+				<option :key="i" v-if="i !== 'none'" v-for="i in $store.state.grid.gridsList" :value="i">
+					{{i}}
+				</option>
 			</select>
 			<label for="add-subgrid">Add Sub-Grid</label>
 			<div>
@@ -87,6 +85,16 @@
 			index: function() {
 				return this.$store.state.grid[this.currentGrid].selectedItem
 			},
+			itemSubGrid: {
+				get() {
+					return this.$store.state.grid[this.currentGrid].items[this.index].subGrid;
+				},
+				set (value) {
+					let grid = this.currentGrid;
+					let index = this.index;
+					this.$store.commit('grid/setItemSubGrid', {value, grid, index})
+				}
+			},
 			fromCol: { get() {
 				return this.$store.state.grid[this.currentGrid].items[this.index].fromCol},
 			  set (value) {this.updateCellOption(value, 'fromCol', this.index)}
@@ -108,6 +116,43 @@
 			},
 		},
 		methods: {
+			checkStackOverflow(value, parent = this.currentGrid) {
+				let store = this.$store;
+
+				// Flat array
+				function flatten (arr, result = []) {
+					for (let i = 0, length = arr.length; i < length; i++) {
+						const value = arr[i];
+						if (Array.isArray(value)) {
+							flatten(value, result);
+						} else {
+							result.push(value);
+						}
+					}
+					return result;
+				};
+
+				// Get all Parrents of subgrid function
+				function getAllParents (chains) {
+					let parents = [];
+					chains.forEach(function(chain) {
+						if (chain === 'root') parents.push('root')
+						else {
+							parents.push(chain);
+							parents.push(getAllParents(store.state.grid[chain].parentGrid));
+						}
+					});
+					return flatten(parents);
+				}
+				if (value === 'none') return true; if (value === 'root') return false;
+				else {
+					let chains = [];
+					chains.push(parent);
+					let parents = getAllParents(chains);
+					if (parents.includes(value)) return false;
+					else return true;
+				}
+			},
 			updateCellOption(value, field, index) {
 				this.$store.commit('grid/changeCellOption', {value, field, index})
 			},

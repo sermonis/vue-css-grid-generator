@@ -3,6 +3,8 @@ import Vue from 'vue';
 const mutations = {
 	addGrid(state, value) {
 		let currentGrid = state.currentGrid;
+		let parentGrid = [];
+		parentGrid.push(currentGrid);
 		let selectedItem = state[currentGrid].selectedItem;
 		let selectedIndex = state.selectedIndex;
 		Vue.set(state[currentGrid].items[selectedItem], 'subGrid', value)
@@ -20,18 +22,19 @@ const mutations = {
 		selectedItem: 0,
 		justifyItems: 'stretch',
 		parentIndex: selectedIndex,
-		parentGrid: currentGrid,
+		parentGrid: parentGrid,
 		alignItems: 'stretch',
 		templateColumns: ['1fr', '1fr'],
 		templateRows: ['1fr', '1fr'],
 		items: [ 
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
-		{fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'}
+		{subGrid: 'none', fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
+		{subGrid: 'none', fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
+		{subGrid: 'none', fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'},
+		{subGrid: 'none', fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'}
 		]
 	});
 		Vue.set(state[value], 'container', state.selectedElement);
+		state.gridsList.push(value)
 	},
 	changeCurrentGrid(state, value) {
 		// Change current grid to selected or created
@@ -67,6 +70,13 @@ const mutations = {
 	},
 	changeOption(state, {value, field}) {
 		state[state.currentGrid][field] = value;
+		function cutItemsCount(state) {
+			let maxGridSize = state[state.currentGrid].templateColumns.length
+												* state[state.currentGrid].templateRows.length;
+			if (state[state.currentGrid].itemsCount > maxGridSize) {
+				state[state.currentGrid].itemsCount = maxGridSize;
+			}
+		}
 		if (field == 'columns' && value !== state[state.currentGrid].templateColumns.length)	{
 
 			if (value > state[state.currentGrid].templateColumns.length) 
@@ -75,7 +85,8 @@ const mutations = {
 
 			if (value < state[state.currentGrid].templateColumns.length) 
 				while (value < state[state.currentGrid].templateColumns.length) 
-					state[state.currentGrid].templateColumns.pop();  
+					state[state.currentGrid].templateColumns.pop();
+			cutItemsCount(state);
 		}
 
 		if (field == 'rows' && value !== state[state.currentGrid].templateRows.length)  {
@@ -87,6 +98,7 @@ const mutations = {
 			if (value < state[state.currentGrid].templateRows.length) 
 				while (value < state[state.currentGrid].templateRows.length) 
 					state[state.currentGrid].templateRows.pop();  
+			cutItemsCount(state);
 		}
 
 		if (field === 'itemsCount') {
@@ -102,6 +114,11 @@ const mutations = {
 		}
 		
 	},
+	setItemSubGrid(state, {value, grid, index}) {
+		Vue.set(state[grid].items[index], 'subGrid', value);
+		Vue.set(state[value].parentGrid, state[value].parentGrid.length, grid)
+	}
+	,
 	changeCellOption(state, {value, field, index}) {
 		Vue.set(state[state.currentGrid].items[index], field, value)
 	},

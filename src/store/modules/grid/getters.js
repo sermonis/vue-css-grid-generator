@@ -55,7 +55,7 @@ const getters = {
 		if (state[grid].container) {
 		let width = state.container.width;
 		let height = state.container.height;
-		let parentGrid = state[grid].parentGrid;
+		let parentGrid = state[grid].parentGrid[0];
 		let parentIndex = state[grid].parentIndex;
 		let justifyContent = state[parentGrid].items[parentIndex].justifySelf;
 		let alignItems = state[parentGrid].items[parentIndex].alignSelf;
@@ -69,7 +69,7 @@ const getters = {
 	cellStyles: (state, getters) => (grid) => {
 		let styles = [];
 		state[grid].items.map((item) => {
-			if (item.subGrid) {
+			if (item.subGrid !== 'none') {
 				styles.push({
 					gridColumn: item.fromCol + '/' + (!isNaN(parseInt(item.toCol)) ? parseInt(item.toCol) + 1 : item.toCol),
 					gridRow: item.fromRow + '/' + (!isNaN(parseInt(item.toRow)) ? parseInt(item.toRow) + 1 : item.toRow),
@@ -92,7 +92,7 @@ const getters = {
 	cellsSubGrids: (state, getters) => grid => {
 		let items = [];
 		state[grid].items.map((item) => {
-			if (item.subGrid) {
+			if (item.subGrid !== 'none') {
 				items.push(item.subGrid);
 			} else {
 				items.push(null);
