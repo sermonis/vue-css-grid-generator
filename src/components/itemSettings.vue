@@ -52,7 +52,7 @@
 		<div class="sub-grid">
 			<label for="current-grid">Current Grid:</label>
 			<select id="current-grid" v-model="currentGrid">
-				<option :key="i" v-if="i !== 'none'" v-for="i in $store.state.grid.gridsList" :value="i">
+				<option :disabled="checkSubGridParents(i)" :key="i" v-if="i !== 'none'" v-for="i in $store.state.grid.gridsList" :value="i">
 					{{i}}
 				</option>
 			</select>
@@ -116,42 +116,46 @@
 			},
 		},
 		methods: {
+			checkSubGridParents(value) {
+				if (value === 'root') return false;
+				if (this.$store.state.grid[value].container === 'root0') {
+					return true;
+				}
+			},
 			checkStackOverflow(value, parent = this.currentGrid) {
-				let store = this.$store;
+				let state = this.$store.state.grid;
 
+				function calcNodes(grid) {
+					let nodes = []
+					state[grid].items.forEach(function(item, index) {
+						if (item.subGrid !== 'none'){ 
+							nodes.push({grid: item.subGrid, parent: grid});
+							let newNodes = calcNodes(item.subGrid);
+							nodes = nodes.concat(newNodes);
+						} 
+					})
+					return nodes;
+				}
+
+				function buildHierarchy(grid) {
+					let hierarchy = [];
+					if (grid === 'root') return hierarchy;
+					nodes.forEach(function(node) {
+						if (node.grid === grid) {
+							hierarchy.push(node.grid)
+							let newHierarchy = buildHierarchy(node.parent);
+							hierarchy = hierarchy.concat(newHierarchy)
+						}
+					})
+					return hierarchy;
+				}
+
+
+				let nodes = calcNodes('root');
+				let hierarchy = buildHierarchy(parent)
+				if (value === 'root' || hierarchy.includes(value)) return false
+				else return true
 				// Flat array
-				function flatten (arr, result = []) {
-					for (let i = 0, length = arr.length; i < length; i++) {
-						const value = arr[i];
-						if (Array.isArray(value)) {
-							flatten(value, result);
-						} else {
-							result.push(value);
-						}
-					}
-					return result;
-				};
-
-				// Get all Parrents of subgrid function
-				function getAllParents (chains) {
-					let parents = [];
-					chains.forEach(function(chain) {
-						if (chain === 'root') parents.push('root')
-						else {
-							parents.push(chain);
-							parents.push(getAllParents(store.state.grid[chain].parentGrid));
-						}
-					});
-					return flatten(parents);
-				}
-				if (value === 'none') return true; if (value === 'root') return false;
-				else {
-					let chains = [];
-					chains.push(parent);
-					let parents = getAllParents(chains);
-					if (parents.includes(value)) return false;
-					else return true;
-				}
 			},
 			updateCellOption(value, field, index) {
 				this.$store.commit('grid/changeCellOption', {value, field, index})

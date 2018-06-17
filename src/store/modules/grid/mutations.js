@@ -3,11 +3,17 @@ import Vue from 'vue';
 const mutations = {
 	addGrid(state, value) {
 		let currentGrid = state.currentGrid;
-		let parentGrid = [];
-		parentGrid.push(currentGrid);
-		let selectedItem = state[currentGrid].selectedItem;
+		let parentGrids = [];
 		let selectedIndex = state.selectedIndex;
+		let selectedItem = state[currentGrid].selectedItem;
+		
+		//Add sub-grid container item as parrent to parentsGrid property
+		parentGrids.push({name: currentGrid, index: selectedIndex + 1});
+
+		// Set subGrid property of item to choosen subgrid
 		Vue.set(state[currentGrid].items[selectedItem], 'subGrid', value)
+
+		// Add New Grid to the state
 		Vue.set(state, value, {
 		columns: 2,
 		rows: 2,
@@ -21,8 +27,7 @@ const mutations = {
 		alignContent: 'start',
 		selectedItem: 0,
 		justifyItems: 'stretch',
-		parentIndex: selectedIndex,
-		parentGrid: parentGrid,
+		parentGrids: parentGrids,
 		alignItems: 'stretch',
 		templateColumns: ['1fr', '1fr'],
 		templateRows: ['1fr', '1fr'],
@@ -33,7 +38,12 @@ const mutations = {
 		{subGrid: 'none', fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'}
 		]
 	});
-		Vue.set(state[value], 'container', state.selectedElement);
+
+		// Set container of grid to first linked item container
+		let container = state[value].parentGrids[0].name + state[value].parentGrids[0].index;
+		Vue.set(state[value], 'container', container);
+
+		// Add created grid to grids list
 		state.gridsList.push(value)
 	},
 	changeCurrentGrid(state, value) {
@@ -43,7 +53,7 @@ const mutations = {
 
 		// Loop through grids and set cached container sizes if it's possible from current view
 		for (let grid in state) {
-			if (state[grid].container && state.refs[state[grid].container][0]) {
+			if (state[grid].container && state.refs[state[grid].container] && state.refs[state[grid].container][0]) {
 				state.refs[state[grid].container][0].$el.style.height = '100%';
 				state.refs[state[grid].container][0].$el.style.width = '100%';
 				let sizes = {
@@ -104,21 +114,80 @@ const mutations = {
 		if (field === 'itemsCount') {
 			if (value > state[state.currentGrid].items.length) 
 				while (value > state[state.currentGrid].items.length) 
-					state[state.currentGrid].items.push({fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'});
+					state[state.currentGrid].items.push({subGrid: 'none', fromCol: 'auto',toCol: 'auto', fromRow: 'auto', toRow: 'auto', justifySelf: 'auto', alignSelf: 'auto'});
 
 			if (value < state[state.currentGrid].items.length) {
 				Vue.set(state[state.currentGrid], 'selectedItem', value - 1);
-				while (value < state[state.currentGrid].items.length) 
+				while (value < state[state.currentGrid].items.length) {
+					let currentIndex = state[state.currentGrid].items.length - 1;
+					let itemSubGrid = state[state.currentGrid].items[currentIndex].subGrid;
+					if (itemSubGrid !== 'none') {
+						let index = state[state.currentGrid].items.length - 1;
+						Vue.set(state[state.currentGrid].items[index], 'subGrid', 'none')
+						function calcNodes(grid) {
+							let nodes = []
+							state[grid].items.forEach(function(item, index) {
+								if (item.subGrid !== 'none'){ 
+									nodes.push({grid: item.subGrid, parent: {name: grid, index: index + 1}});
+									let newNodes = calcNodes(item.subGrid);
+									nodes = nodes.concat(newNodes);
+								} 
+							})
+							return nodes;
+						}
+						let nodes = calcNodes('root');
+
+						state.gridsList.forEach(function(grid) {
+							if (grid === 'root' || grid === 'none') return null;
+							else {
+								let parents = [];
+								nodes.forEach(function(node) {
+									if (node.grid == grid) parents.push(node.parent);
+								})
+								console.log(parents)
+								Vue.set(state[grid], 'parentGrids', parents)
+								if (parents.length === 0) Vue.set(state[grid], 'container', 'root0');
+								if (parents.length === 1) Vue.set(state[grid], 'container', state[grid].parentGrids[0].name + state[grid].parentGrids[0].index);
+							}
+						})
+
+					}
 					state[state.currentGrid].items.pop();
+				}
 			}
 		}
 		
 	},
 	setItemSubGrid(state, {value, grid, index}) {
-		Vue.set(state[grid].items[index], 'subGrid', value);
-		Vue.set(state[value].parentGrid, state[value].parentGrid.length, grid)
-	}
-	,
+		Vue.set(state[grid].items[index], 'subGrid', value)
+
+		function calcNodes(grid) {
+			let nodes = []
+			state[grid].items.forEach(function(item, index) {
+				if (item.subGrid !== 'none'){ 
+					nodes.push({grid: item.subGrid, parent: {name: grid, index: index + 1}});
+					let newNodes = calcNodes(item.subGrid);
+					nodes = nodes.concat(newNodes);
+				} 
+			})
+			return nodes;
+		}
+		let nodes = calcNodes('root');
+
+
+		state.gridsList.forEach(function(grid) {
+			if (grid === 'root' || grid === 'none') return null;
+			else {
+				let parents = [];
+				nodes.forEach(function(node) {
+					if (node.grid == grid) parents.push(node.parent);
+				})
+				Vue.set(state[grid], 'parentGrids', parents)
+				if (parents.length === 0) Vue.set(state[grid], 'container', 'root0');
+				if (parents.length === 1) Vue.set(state[grid], 'container', state[grid].parentGrids[0].name + state[grid].parentGrids[0].index);
+			}
+		})
+	},
 	changeCellOption(state, {value, field, index}) {
 		Vue.set(state[state.currentGrid].items[index], field, value)
 	},

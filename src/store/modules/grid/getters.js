@@ -55,8 +55,8 @@ const getters = {
 		if (state[grid].container) {
 		let width = state.container.width;
 		let height = state.container.height;
-		let parentGrid = state[grid].parentGrid[0];
-		let parentIndex = state[grid].parentIndex;
+		let parentGrid = state[grid].parentGrids[0].name;
+		let parentIndex = state[grid].parentGrids[0].index - 1;
 		let justifyContent = state[parentGrid].items[parentIndex].justifySelf;
 		let alignItems = state[parentGrid].items[parentIndex].alignSelf;
 		return {
