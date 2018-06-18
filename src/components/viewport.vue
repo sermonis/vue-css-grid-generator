@@ -66,7 +66,7 @@ export default {
 			if (height !== 'auto') {
 				height = applyZoom(height);
 			}
-			if (/\d+(\.\d+)?%/.test(height)) return 'calc(100% - 3em)'; 
+			if (/\d+(\.\d+)?%/.test(height)) return 'calc(100% - 6em)'; 
 			else return height;
 		},
 		gridWidth: function(){
@@ -88,7 +88,7 @@ export default {
 			if (width !== 'auto') {
 				width = applyZoom(width);
 			}
-			if (/\d+(\.\d+)?%/.test(width)) return 'calc(100% - 3em)'; 
+			if (/\d+(\.\d+)?%/.test(width)) return 'calc(100% - 6em)'; 
 			else return width;
 		},
 	},
