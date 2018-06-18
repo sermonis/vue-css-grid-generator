@@ -1,14 +1,8 @@
 <template>
-<pre>
-<code :key="'grids' + index" v-for="(grid, index) in gridStyles">
-{{grid.class}} {
-{{grid.styles}}
-}</code>
-<code v-for="(item, index) in itemStyles" :key="'items' + index">
-{{item.class}} {
-{{item.styles}}}
-</code>
-</pre>
+<pre><code :key="'grids' + index" v-for="(grid, index) in gridStyles">{{grid.class}} {
+{{grid.styles}}}
+</code><code v-for="(item, index) in itemStyles" :key="'items' + index">{{item.class}} {
+{{item.styles}}}</code></pre>
 </template>
 
 <script>
@@ -28,14 +22,14 @@ export default {
 				
 				let styles = gridStyles[gridStyles.length - 1].styles;
 
-				styles += '\talign-content' + ': ' + store.state.grid[grid].alignContent + ';\n';
-				styles += '\talign-items' + ': ' + store.state.grid[grid].alignItems + ';\n';
-				styles += '\tgap' + ': ' + store.state.grid[grid].rowsGap + ' ' + store.state.grid[grid].columnsGap + ';\n';
-				styles += '\tgrid-auto-flow' + ': ' + store.state.grid[grid].gridAutoFlow + ';\n';
+				if (store.state.grid[grid].alignContent !== 'start') styles += '\talign-content' + ': ' + store.state.grid[grid].alignContent + ';\n';
+				if (store.state.grid[grid].alignItems !== 'stretch')styles += '\talign-items' + ': ' + store.state.grid[grid].alignItems + ';\n';
+				if (store.state.grid[grid].rowsGap + ' ' + store.state.grid[grid].columnsGap !== '0 0') styles += '\tgap' + ': ' + store.state.grid[grid].rowsGap + ' ' + store.state.grid[grid].columnsGap + ';\n';
+				if (store.state.grid[grid].gridAutoFlow  !== 'row') styles += '\tgrid-auto-flow' + ': ' + store.state.grid[grid].gridAutoFlow + ';\n';
 				styles += '\theight' + ': ' + store.state.grid[grid].height + ';\n';
 				styles += '\twidth' + ': ' + store.state.grid[grid].width + ';\n';
-				styles += '\tjustify-content' + ': ' + store.state.grid[grid].justifyContent + ';\n';
-				styles += '\tjustify-items' + ': ' + store.state.grid[grid].justifyItems + ';\n';
+				if (store.state.grid[grid].justifyContent !== 'start') styles += '\tjustify-content' + ': ' + store.state.grid[grid].justifyContent + ';\n';
+				if (store.state.grid[grid].justifyItems !== 'stretch') styles += '\tjustify-items' + ': ' + store.state.grid[grid].justifyItems + ';\n';
 				styles += '\tgrid-template-columns' + ': ' + store.state.grid[grid].templateColumns.join(' ') + ';\n';
 				styles += '\tgrid-template-rows' + ': ' + store.state.grid[grid].templateRows.join(' ') + ';\n';
 			
@@ -84,3 +78,10 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+	pre, code {
+		font-family: Inconsolata;
+		margin: 0;
+	}
+</style>

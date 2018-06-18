@@ -39,6 +39,8 @@ export default {
 
 <style lang="stylus">
 
+@import url('https://fonts.googleapis.com/css?family=Inconsolata|Montserrat:400,600')
+
 body
   padding 0
   margin 0
@@ -54,12 +56,22 @@ body
   grid-template-columns 1fr 320px
 .codeOutput
   display grid
-  height 50vh
+  height 70vh
   grid-template-columns 1fr 1fr
+  tab-size 2
+  grid-column-gap 3px
+  line-height 2em
+  letter-spacing .1em
+  padding 3px 0
+  background #333
   .html
-    background red
+    background #101010
     overflow-y scroll
+    color #fff
+    padding 50px 50px
   .css
-    background green
+    background #101010
     overflow-y scroll
+    color #fff
+    padding 50px 50px
 </style>

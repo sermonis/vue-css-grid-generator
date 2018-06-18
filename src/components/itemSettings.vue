@@ -192,7 +192,7 @@
 		flex-direction column
 		align-items space-between
 		label
-			font-family Helvetica
+			font-family Montserrat 
 			font-size 11px
 			font-weight 800
 			margin-bottom 10px 
@@ -228,7 +228,7 @@
 	flex-direction column 
 	text-align left
 	label
-		font-family Helvetica
+		font-family Montserrat
 		font-size 11px
 		font-weight 800
 		margin-bottom 10px 

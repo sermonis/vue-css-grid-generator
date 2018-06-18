@@ -27,3 +27,9 @@
 	 }
 	}
 </script>
+<style scoped>
+	pre, code {
+		font-family: Inconsolata;
+		margin: 0;
+	}
+</style>

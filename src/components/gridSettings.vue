@@ -108,13 +108,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="grid-misc">
-			<h2>Grid Miscellaneous</h2>
-			<div>
-				<label for="grid-class">Grid Class (opt.)</label>
-				<input type="text" id="grid-class">
-			</div>
-		</div>
 	</div>
 </div>
 </template>
@@ -206,7 +199,7 @@ padding: 40px;
 box-sizing: border-box;
 background: #101010;
 align-content: space-between;
-font-family: Futura;
+font-family: Montserrat;
 width: 320px;
 text-align: left;
 }
@@ -229,12 +222,13 @@ h2 {
 	opacity: .7;
 	font-size: 10px;
 	text-transform: uppercase;
-	letter-spacing: .1em;
+	font-family: Montserrat;
+	letter-spacing: .05em;
 	font-weight: 900;
 }
 
 label {
-	font-family: Helvetica ;
+	font-family: Montserrat;
 	font-size: 11px;
 	font-weight: 800;
 	opacity: .5;

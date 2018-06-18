@@ -89,6 +89,7 @@
 	.grid {
 		display: grid;
 		box-shadow: inset 0 0 0 1px #666;
+		font-family: Montserrat;
 	}
 	.container {
 		position: relative;
