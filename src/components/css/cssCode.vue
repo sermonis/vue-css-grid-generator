@@ -17,7 +17,7 @@ export default {
 				if (grid === 'none') return null;
 				gridStyles.push({
 					class: '.' + grid,
-					styles: ''
+					styles: 'display: grid;\n'
 				});
 				
 				let styles = gridStyles[gridStyles.length - 1].styles;
