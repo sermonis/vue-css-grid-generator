@@ -113,153 +113,211 @@
 </template>
 <script>
 export default {
-name: 'gridSettings',
-computed: {
-	currentGrid: function() {
-		return this.$store.state.grid.currentGrid
-	},
-	width: { get() {return this.$store.state.grid[this.currentGrid].width},
-		set (value) {this.updateOption(value, 'width')}
-	},
-
-	height: { get() {return this.$store.state.grid[this.currentGrid].height},
-		set (value) {this.updateOption(value, 'height')}
-	},
-
-	columns: { get() {return this.$store.state.grid[this.currentGrid].columns},
-		set (value) {this.updateOption(value, 'columns')}
-	},
-
-	rows: { get() {return this.$store.state.grid[this.currentGrid].rows},
-		set (value) {this.updateOption(value, 'rows')}
-	},
-
-	maxCount: function() {
-		return this.$store.state.grid[this.currentGrid].rows * this.$store.state.grid[this.currentGrid].columns
-	},
-
-	columnsGap: { get() {return this.$store.state.grid[this.currentGrid].columnsGap},
-		set (value) {this.updateOption(value, 'columnsGap')}
-	},
-
-	rowsGap: { get() {return this.$store.state.grid[this.currentGrid].rowsGap},
-		set (value) {this.updateOption(value, 'rowsGap')}
-	},
-
-	itemsCount: { get() {
-			let value = this.$store.state.grid[this.currentGrid].itemsCount;
-			if (value > 0) return value;
-			else return 1;
+	name: 'gridSettings',
+	computed: {
+		currentGrid: function() {
+			return this.$store.state.grid.currentGrid;
 		},
-		set (value) {
-			if (value < 1) this.updateOption(1, 'itemsCount'); 
-			else if (value <= this.maxCount) this.updateOption(value, 'itemsCount')
-			else this.updateOption(this.maxCount, 'itemsCount')
+		width: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].width;
+			},
+			set(value) {
+				this.updateOption(value, 'width');
 			}
-	},
+		},
 
-	gridAutoFlow: { get() {return this.$store.state.grid[this.currentGrid].gridAutoFlow},
-		set (value) {this.updateOption(value, 'gridAutoFlow')}
-	},
+		height: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].height;
+			},
+			set(value) {
+				this.updateOption(value, 'height');
+			}
+		},
 
-	alignItems: { get() {return this.$store.state.grid[this.currentGrid].alignItems},
-		set (value) {this.updateOption(value, 'alignItems')}
-	},
+		columns: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].columns;
+			},
+			set(value) {
+				this.updateOption(value, 'columns');
+			}
+		},
 
-	justifyItems: { get() {return this.$store.state.grid[this.currentGrid].justifyItems},
-		set (value) {this.updateOption(value, 'justifyItems')}
-	},
+		rows: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].rows;
+			},
+			set(value) {
+				this.updateOption(value, 'rows');
+			}
+		},
 
-	alignContent: { get() {return this.$store.state.grid[this.currentGrid].alignContent},
-		set (value) {this.updateOption(value, 'alignContent')}
-	},
+		maxCount: function() {
+			return (
+				this.$store.state.grid[this.currentGrid].rows *
+				this.$store.state.grid[this.currentGrid].columns
+			);
+		},
 
-	justifyContent: {get() {return this.$store.state.grid[this.currentGrid].justifyContent},
-		set (value) {this.updateOption(value, 'justifyContent')}
+		columnsGap: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].columnsGap;
+			},
+			set(value) {
+				this.updateOption(value, 'columnsGap');
+			}
+		},
+
+		rowsGap: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].rowsGap;
+			},
+			set(value) {
+				this.updateOption(value, 'rowsGap');
+			}
+		},
+
+		itemsCount: {
+			get() {
+				let value = this.$store.state.grid[this.currentGrid].itemsCount;
+				if (value > 0) return value;
+				else return 1;
+			},
+			set(value) {
+				if (value < 1) this.updateOption(1, 'itemsCount');
+				else if (value <= this.maxCount) this.updateOption(value, 'itemsCount');
+				else this.updateOption(this.maxCount, 'itemsCount');
+			}
+		},
+
+		gridAutoFlow: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].gridAutoFlow;
+			},
+			set(value) {
+				this.updateOption(value, 'gridAutoFlow');
+			}
+		},
+
+		alignItems: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].alignItems;
+			},
+			set(value) {
+				this.updateOption(value, 'alignItems');
+			}
+		},
+
+		justifyItems: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].justifyItems;
+			},
+			set(value) {
+				this.updateOption(value, 'justifyItems');
+			}
+		},
+
+		alignContent: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].alignContent;
+			},
+			set(value) {
+				this.updateOption(value, 'alignContent');
+			}
+		},
+
+		justifyContent: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].justifyContent;
+			},
+			set(value) {
+				this.updateOption(value, 'justifyContent');
+			}
+		}
+	},
+	methods: {
+		updateOption: function(value, field) {
+			this.$store.commit('grid/changeOption', { value, field });
+		}
 	}
-
-},
-methods: {
-	updateOption: function(value, field) {
-		this.$store.commit('grid/changeOption', {value, field})
-	}
-}
-}
+};
 </script>
 <style scoped>
 .container-controlls {
-display: flex;
-text-align: left;
--webkit-justify-content: space-around;
-justify-content: space-around;
-flex-wrap: wrap;
-padding: 40px;
--webkit-box-sizing: border-box;
--moz-box-sizing: border-box;
-box-sizing: border-box;
-background: #101010;
-align-content: space-between;
-font-family: Montserrat;
-width: 320px;
-text-align: left;
+	display: flex;
+	text-align: left;
+	-webkit-justify-content: space-around;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	padding: 40px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background: #050505;
+	align-content: space-between;
+	font-family: Poppins;
+	width: 320px;
+	text-align: left;
 }
 .container-controlls > div {
-color: #fff;
-text-align: left;
-width: 100%;
--webkit-box-sizing: border-box;
--moz-box-sizing: border-box;
-box-sizing: border-box;
-font-size: 13px;
+	color: #fff;
+	text-align: left;
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	font-size: 13px;
 }
-.container-controlls > div > div{
-display: flex;
-justify-content: space-between;
+.container-controlls > div > div {
+	display: flex;
+	justify-content: space-between;
 }
 
 h2 {
 	margin: 30px 0 10px;
-	opacity: .7;
+	opacity: 0.7;
 	font-size: 10px;
 	text-transform: uppercase;
-	font-family: Montserrat;
-	letter-spacing: .05em;
+	font-family: Poppins;
+	letter-spacing: 0.05em;
 	font-weight: 900;
 }
 
 label {
-	font-family: Montserrat;
+	font-family: Poppins;
 	font-size: 11px;
 	font-weight: 800;
-	opacity: .5;
+	opacity: 0.5;
 }
 
 input,
 select {
-width: 100px;
-margin-top: 8px;
-margin-bottom: 10px;
-height: 30px  ;
-border: none;
-color: #fff;
-background: #000;
-border: 2px solid #212121;
-border-radius: 5px;
--webkit-box-sizing: border-box;
-	 -moz-box-sizing: border-box;
-				box-sizing: border-box;
-padding: 0 10px;
+	width: 100px;
+	margin-top: 8px;
+	margin-bottom: 10px;
+	height: 30px;
+	border: none;
+	color: #fff;
+	background: #000;
+	border: 2px solid #212121;
+	border-radius: 5px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0 10px;
 }
 input:focus,
 select:focus {
 	outline: none;
-	border-color: #007AFF;
+	border-color: #007aff;
 }
 .grid-misc label {
 	line-height: 30px;
 }
 .grid-misc input {
- margin: 0 
+	margin: 0;
 }
 .container-controlls > .grid-misc > div {
 	margin: 10px 0;

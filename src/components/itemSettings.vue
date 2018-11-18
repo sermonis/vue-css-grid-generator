@@ -71,209 +71,289 @@
 
 </template>
 <script>
-	export default {
-		name: 'itemSettings',
-		computed: {
-			zoom: {
-				get() {return this.$store.state.grid.zoom},
-				set(value) {this.$store.commit('grid/changeZoom', value)}
+export default {
+	name: 'itemSettings',
+	computed: {
+		zoom: {
+			get() {
+				return this.$store.state.grid.zoom;
 			},
-			currentGrid: { get() {
-				return this.$store.state.grid.currentGrid},
-			  set (value) {this.changeCurrentGrid(value)}
-			},
-			index: function() {
-				return this.$store.state.grid[this.currentGrid].selectedItem
-			},
-			itemSubGrid: {
-				get() {
-					return this.$store.state.grid[this.currentGrid].items[this.index].subGrid;
-				},
-				set (value) {
-					let grid = this.currentGrid;
-					let index = this.index;
-					this.$store.commit('grid/setItemSubGrid', {value, grid, index})
-				}
-			},
-			fromCol: { get() {
-				return this.$store.state.grid[this.currentGrid].items[this.index].fromCol},
-			  set (value) {this.updateCellOption(value, 'fromCol', this.index)}
-			},
-			toCol: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].toCol},
-			  set (value) {this.updateCellOption(value, 'toCol', this.index)}
-			},
-			fromRow: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].fromRow},
-			  set (value) {this.updateCellOption(value, 'fromRow', this.index)}
-			},
-			toRow: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].toRow},
-			  set (value) {this.updateCellOption(value, 'toRow', this.index)}
-			},
-			justifySelf: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].justifySelf},
-			  set (value) {this.updateCellOption(value, 'justifySelf', this.index)}
-			},
-			alignSelf: { get() {return this.$store.state.grid[this.currentGrid].items[this.index].alignSelf},
-			  set (value) {this.updateCellOption(value, 'alignSelf', this.index)}
-			},
+			set(value) {
+				this.$store.commit('grid/changeZoom', value);
+			}
 		},
-		methods: {
-			checkSubGridParents(value) {
-				if (value === 'root') return false;
-				if (this.$store.state.grid[value].container === 'root0') {
-					return true;
+		currentGrid: {
+			get() {
+				return this.$store.state.grid.currentGrid;
+			},
+			set(value) {
+				this.changeCurrentGrid(value);
+			}
+		},
+		index: function() {
+			return this.$store.state.grid[this.currentGrid].selectedItem;
+		},
+		itemSubGrid: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].items[this.index]
+					.subGrid;
+			},
+			set(value) {
+				let grid = this.currentGrid;
+				let index = this.index;
+				this.$store.commit('grid/setItemSubGrid', { value, grid, index });
+			}
+		},
+		fromCol: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].items[this.index]
+					.fromCol;
+			},
+			set(value) {
+				this.updateCellOption(value, 'fromCol', this.index);
+			}
+		},
+		toCol: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].items[this.index].toCol;
+			},
+			set(value) {
+				this.updateCellOption(value, 'toCol', this.index);
+			}
+		},
+		fromRow: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].items[this.index]
+					.fromRow;
+			},
+			set(value) {
+				this.updateCellOption(value, 'fromRow', this.index);
+			}
+		},
+		toRow: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].items[this.index].toRow;
+			},
+			set(value) {
+				this.updateCellOption(value, 'toRow', this.index);
+			}
+		},
+		justifySelf: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].items[this.index]
+					.justifySelf;
+			},
+			set(value) {
+				this.updateCellOption(value, 'justifySelf', this.index);
+			}
+		},
+		alignSelf: {
+			get() {
+				return this.$store.state.grid[this.currentGrid].items[this.index]
+					.alignSelf;
+			},
+			set(value) {
+				this.updateCellOption(value, 'alignSelf', this.index);
+			}
+		}
+	},
+	methods: {
+		checkSubGridParents(value) {
+			if (value === 'root') return false;
+			if (this.$store.state.grid[value].container === 'root0') {
+				return true;
+			}
+		},
+		checkStackOverflow(value, parent = this.currentGrid) {
+			let state = this.$store.state.grid;
+
+			function calcNodes(grid) {
+				let nodes = [];
+				state[grid].items.forEach(function(item, index) {
+					if (item.subGrid !== 'none') {
+						nodes.push({ grid: item.subGrid, parent: grid });
+						let newNodes = calcNodes(item.subGrid);
+						nodes = nodes.concat(newNodes);
+					}
+				});
+				return nodes;
+			}
+
+			function buildHierarchy(grid) {
+				let hierarchy = [];
+				if (grid === 'root') return hierarchy;
+				nodes.forEach(function(node) {
+					if (node.grid === grid) {
+						hierarchy.push(node.grid);
+						let newHierarchy = buildHierarchy(node.parent);
+						hierarchy = hierarchy.concat(newHierarchy);
+					}
+				});
+				return hierarchy;
+			}
+
+			let nodes = calcNodes('root');
+			let hierarchy = buildHierarchy(parent);
+			if (value === 'root' || hierarchy.includes(value)) return false;
+			else return true;
+			// Flat array
+		},
+		updateCellOption(value, field, index) {
+			this.$store.commit('grid/changeCellOption', { value, field, index });
+		},
+		addGrid(event) {
+			this.$store.dispatch('grid/addGrid', event.target[0].value);
+		},
+		changeCurrentGrid(value) {
+			this.$store.commit('grid/changeCurrentGrid', value);
+		}
+	}
+};
+</script>
+<style scoped lang="stylus">
+.container {
+	display: grid;
+	background: #050505;
+	grid-template-columns: 1fr 320px;
+}
+
+.props {
+	color: #fff;
+	display: flex;
+	padding: 0 30px;
+	-webkit-flex-direction: row;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	height: 100%;
+	align-items: center;
+	justify-content: space-around;
+
+	div {
+		text-align: left;
+		display: flex;
+		-webkit-flex-direction: column;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		align-items: space-between;
+
+		label {
+			font-family: Poppins;
+			font-size: 11px;
+			font-weight: 800;
+			margin-bottom: 10px;
+			opacity: 0.5;
+		}
+
+		input, select {
+			width: 150px;
+			margin-bottom: 20px;
+			height: 30px;
+			border: none;
+			color: #fff;
+			background: #000;
+			border: 2px solid #212121;
+			border-radius: 5px;
+
+			-webkit-box-sizing border-box {
+				-moz-box-sizing border-box {
+					box-sizing: border-box;
 				}
-			},
-			checkStackOverflow(value, parent = this.currentGrid) {
-				let state = this.$store.state.grid;
+			}
 
-				function calcNodes(grid) {
-					let nodes = []
-					state[grid].items.forEach(function(item, index) {
-						if (item.subGrid !== 'none'){ 
-							nodes.push({grid: item.subGrid, parent: grid});
-							let newNodes = calcNodes(item.subGrid);
-							nodes = nodes.concat(newNodes);
-						} 
-					})
-					return nodes;
-				}
+			padding: 0 10px;
 
-				function buildHierarchy(grid) {
-					let hierarchy = [];
-					if (grid === 'root') return hierarchy;
-					nodes.forEach(function(node) {
-						if (node.grid === grid) {
-							hierarchy.push(node.grid)
-							let newHierarchy = buildHierarchy(node.parent);
-							hierarchy = hierarchy.concat(newHierarchy)
-						}
-					})
-					return hierarchy;
-				}
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
 
+		input:focus, select:focus {
+			outline: none;
+			border-color: #007AFF;
+		}
+	}
+}
 
-				let nodes = calcNodes('root');
-				let hierarchy = buildHierarchy(parent)
-				if (value === 'root' || hierarchy.includes(value)) return false
-				else return true
-				// Flat array
-			},
-			updateCellOption(value, field, index) {
-				this.$store.commit('grid/changeCellOption', {value, field, index})
-			},
-			addGrid(event) {
-				this.$store.dispatch('grid/addGrid', event.target[0].value);
-			},
-			changeCurrentGrid(value) {
-				this.$store.commit('grid/changeCurrentGrid', value)
+.sub-grid {
+	color: #fff;
+	display: flex;
+	padding: 0 30px;
+	align-self: center;
+	-webkit-flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	text-align: left;
+
+	label {
+		font-family: Poppins;
+		font-size: 11px;
+		font-weight: 800;
+		margin-bottom: 10px;
+		opacity: 0.5;
+	}
+
+	input, select {
+		width: 150px;
+		margin-bottom: 20px;
+		height: 30px;
+		border: none;
+		color: #fff;
+		background: #000;
+		border: 2px solid #212121;
+		border-radius: 5px;
+
+		-webkit-box-sizing border-box {
+			-moz-box-sizing border-box {
+				box-sizing: border-box;
+			}
+		}
+
+		padding: 0 10px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	input:focus, select:focus {
+		outline: none;
+		border-color: #007AFF;
+	}
+
+	select {
+		width: 200px;
+	}
+
+	div {
+		display: flex;
+		-webkit-flex-direction: row;
+		-ms-flex-direction: row;
+		flex-direction: row;
+
+		input {
+			width: 120px;
+			margin-bottom: 0;
+		}
+
+		input[type='submit'] {
+			width: 70px;
+			margin-left: 10px;
+			background: linear-gradient(0deg, #007AFF 0%, #68abf5 100%);
+			cursor: pointer;
+
+			&:active {
+				border-color: #212121;
+			}
+
+			&:focus {
+				border-color: #212121;
+				outline: none;
+			}
+
+			&:hover {
+				background: linear-gradient(0deg, #0e56a5 0%, #007AFF 100%);
 			}
 		}
 	}
-</script>
-<style scoped lang="stylus">
-.container
-	display grid
-	background #161616
-	grid-template-columns 1fr 320px
-.props
-	color #fff
-	display flex
-	padding 0 30px
-	-webkit-flex-direction row 
-	-ms-flex-direction row 
-	flex-direction row
-	height 100%
-	align-items center
-	justify-content space-around
-	div
-		text-align left
-		display flex
-		-webkit-flex-direction column 
-		-ms-flex-direction column 
-		flex-direction column
-		align-items space-between
-		label
-			font-family Montserrat 
-			font-size 11px
-			font-weight 800
-			margin-bottom 10px 
-			opacity .5
-		input,
-		select
-			width 150px
-			margin-bottom 20px
-			height 30px
-			border none
-			color #fff
-			background #000
-			border 2px solid #212121
-			border-radius 5px
-			-webkit-box-sizing border-box
-			   -moz-box-sizing border-box
-			        box-sizing border-box
-			padding 0 10px
-			&:last-child 
-				margin-bottom 0 
-		input:focus,
-		select:focus
-			  outline none
-			  border-color #007AFF
-			
-.sub-grid
-	color #fff
-	display flex
-	padding 0 30px
-	align-self center
-	-webkit-flex-direction column 
-	-ms-flex-direction column 
-	flex-direction column 
-	text-align left
-	label
-		font-family Montserrat
-		font-size 11px
-		font-weight 800
-		margin-bottom 10px 
-		opacity .5
-	input,
-	select
-		width 150px
-		margin-bottom 20px
-		height 30px
-		border none
-		color #fff
-		background #000
-		border 2px solid #212121
-		border-radius 5px
-		-webkit-box-sizing border-box
-		   -moz-box-sizing border-box
-		        box-sizing border-box
-		padding 0 10px
-		&:last-child 
-			margin-bottom 0
-
-	input:focus,
-	select:focus
-		  outline none
-		  border-color #007AFF
-	select
-		width 200px
-	div
-		display flex
-		-webkit-flex-direction row 
-		-ms-flex-direction row 
-		flex-direction row
-		input
-			width 120px
-			margin-bottom 0 
-		input[type='submit']
-			width 70px
-			margin-left 10px
-			background linear-gradient(0deg, #007AFF 0%, #68abf5 100%)
-			cursor pointer
-			&:active
-				border-color: #212121
-			&:focus
-				border-color: #212121
-				outline none
-			&:hover
-				background linear-gradient(0deg, #0e56a5 0%, #007AFF 100%)
+}
 </style>
