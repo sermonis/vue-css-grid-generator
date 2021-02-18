@@ -1,6 +1,8 @@
-# CSS Grid Layout Generator
+# Vue CSS Grid Layout Generator
 
 > Simple visual builder for creating css grid layouts. [Try Now!](http://css-grid-builder.octrace.pro)
+
+![](screenshot.png)
 
 ## Build Setup
 
